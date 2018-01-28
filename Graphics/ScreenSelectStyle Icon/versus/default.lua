@@ -1,12 +1,14 @@
-local t = Def.ActorFrame{
-  GainFocusCommand=cmd(sleep,0.2;queuecommand,"Play");
-  PlayCommand=function(self)
-    SOUND:PlayAnnouncer( "ScreenSelectStyle comment Double" )
-  end;
-};
+local lang = "us";
+local t = Def.ActorFrame {};
+
+if THEME:GetCurLanguage() == "ja" then
+	lang = "jp";
+end;
+
+local path = THEME:GetAbsolutePath("Graphics/ScreenSelectStyle Icon/versus/");
 
 t[#t+1] = Def.ActorFrame{
-  InitCommand=cmd(xy,SCREEN_CENTER_X+244,SCREEN_CENTER_Y-8;zoom,0.75);
+  InitCommand=cmd(xy,SCREEN_CENTER_X+360,SCREEN_CENTER_Y-8);
   Def.ActorFrame{
     LoadActor(THEME:GetPathG("","_shared/SelectStyle/infomiddle"))..{
       OnCommand=function(self)
@@ -18,11 +20,11 @@ t[#t+1] = Def.ActorFrame{
       end;
       On2Command=cmd(diffusealpha,0;zoomy,0;sleep,0.5;smooth,0.2;zoomy,1;diffusealpha,1);
       OffCommand=cmd(smooth,0.2;zoomy,0;diffusealpha,0);
-      GainFocusCommand=cmd(diffusealpha,0;zoomy,0;smooth,0.2;zoomy,1;diffusealpha,1);
-      LoseFocusCommand=cmd(queuecommand,"Off");
+      GainFocusCommand=cmd(finishtweening;diffusealpha,0;zoomy,0;smooth,0.2;zoomy,1;diffusealpha,1);
+      LoseFocusCommand=cmd(finishtweening;queuecommand,"Off");
     };
-    LoadActor("text")..{
-      InitCommand=cmd(y,-24);
+    Def.Sprite{
+      InitCommand=cmd(y,-24;playcommand,"Set");
       OnCommand=function(self)
         if GAMESTATE:GetNumPlayersEnabled() == 2 then
           self:queuecommand("On2");
@@ -30,13 +32,20 @@ t[#t+1] = Def.ActorFrame{
           self:diffusealpha(0);
         end;
       end;
+			SetCommand=function(self)
+				if lang == "us" then
+					self:Load(path.."e_text.png");
+				else
+					self:Load(path.."j_text.png")
+				end;
+			end;
       On2Command=cmd(diffusealpha,0;sleep,0.55;smooth,0.2;diffusealpha,1);
       OffCommand=cmd(smooth,0.1;diffusealpha,0);
       GainFocusCommand=cmd(diffusealpha,0;sleep,0.1;smooth,0.2;diffusealpha,1);
       LoseFocusCommand=cmd(queuecommand,"Off");
     };
-    LoadActor("pad")..{
-      InitCommand=cmd(xy,166,34);
+    LoadActor("infopad")..{
+      InitCommand=cmd(xy,160,34);
       OnCommand=function(self)
         if GAMESTATE:GetNumPlayersEnabled() == 2 then
           self:queuecommand("On2");
@@ -60,13 +69,20 @@ t[#t+1] = Def.ActorFrame{
       end;
     end;
     On2Command=cmd(diffusealpha,0;y,0;sleep,0.5;smooth,0.2;y,-94;diffusealpha,1);
-    OffCommand=cmd(smooth,0.2;y,0;diffusealpha,0);
+    OffCommand=cmd(smooth,0.1;y,0;diffusealpha,0);
     GainFocusCommand=cmd(diffusealpha,0;y,0;smooth,0.2;y,-94;diffusealpha,1);
     LoseFocusCommand=cmd(queuecommand,"Off");
     LoadActor(THEME:GetPathG("","_shared/SelectStyle/infotop"));
-    LoadActor("title")..{
-      InitCommand=cmd(x,-7);
-    };
+    Def.Sprite{
+      InitCommand=cmd(x,-50;playcommand,"Set");
+      SetCommand=function(self)
+        if lang == "us" then
+          self:Load(path.."e_title.png");
+        else
+          self:Load(path.."j_title.png")
+        end;
+      end;
+    }
   };
   LoadActor(THEME:GetPathG("","_shared/SelectStyle/infobottom"))..{
     InitCommand=cmd(y,72);
@@ -78,7 +94,7 @@ t[#t+1] = Def.ActorFrame{
       end;
     end;
     On2Command=cmd(diffusealpha,0;y,0;sleep,0.5;smooth,0.2;y,72;diffusealpha,1);
-    OffCommand=cmd(smooth,0.2;y,0;diffusealpha,0);
+    OffCommand=cmd(smooth,0.1;y,0;diffusealpha,0);
     GainFocusCommand=cmd(diffusealpha,0;y,0;smooth,0.2;y,72;diffusealpha,1);
     LoseFocusCommand=cmd(queuecommand,"Off");
   };
