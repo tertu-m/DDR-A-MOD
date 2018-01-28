@@ -27,40 +27,13 @@ local t = Def.ActorFrame {
 		SetCommand=function(self,params)
 			self:stoptweening();
 			if params.Text == '' then
-				self:settextf( '%s', "RANDOM SELECT MUSIC");
+				self:settext("RANDOM");
 			elseif GAMESTATE:GetSortOrder() == 'SortOrder_Group' then
-				if string.find(params.Text, '-' ) then
-					self:settextf( '%s',string.gsub(params.Text,"%d%d? %- ", ""));
-				else
-					self:settextf( '%s',params.Text);
-				end
+				self:settext(string.gsub(params.Text,"^%d%d? ?%- ?", ""));
 			elseif GAMESTATE:GetSortOrder() == 'SortOrder_TopGrades' then
-				if string.find(params.Text, 'AAAA' ) then
-					local start = string.find(params.Text, 'AAAA' );
-					self:settextf( 'AAA ' .. '%s',string.sub(params.Text,start+5));
-				elseif string.find(params.Text, 'AAA' ) then
-					local start = string.find(params.Text, 'AAA' );
-					self:settextf( 'AA ' .. '%s',string.sub(params.Text,start+4));
-				elseif string.find(params.Text, 'AA' ) then
-					local start = string.find(params.Text, 'AA' );
-					self:settextf( 'A ' .. '%s',string.sub(params.Text,start+3));
-				elseif string.find(params.Text, 'A' ) then
-					local start = string.find(params.Text, 'A' );
-					self:settextf( 'B ' .. '%s',string.sub(params.Text,start+2));
-				elseif string.find(params.Text, 'B' )then
-					local start = string.find(params.Text, 'B' );
-					self:settextf( 'C ' .. '%s',string.sub(params.Text,start+2));
-				elseif string.find(params.Text, 'C' )then
-					local start = string.find(params.Text, 'C' );
-					self:settextf( 'D ' .. '%s',string.sub(params.Text,start+2));
-				elseif string.find(params.Text, 'D' )then
-					local start = string.find(params.Text, 'D' );
-					self:settextf( 'E ' .. '%s',string.sub(params.Text,start+2));
-				else
-					self:settextf( '%s',params.Text);
-				end
+				self:settext(string.gsub(params.Text,"AAAA","AAA+"))
 			else
-				self:settextf( '%s',params.Text);
+				self:settext(params.Text);
 			end
 		end;
 	};
