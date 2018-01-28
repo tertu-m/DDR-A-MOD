@@ -58,8 +58,6 @@ function SavePaneControl( PlayerUID, MyValue, Mode)
 	end
 end;
 
-t[#t+1] = StandardDecorationFromFileOptional("DifficultyListP1","DifficultyListP1");
-t[#t+1] = StandardDecorationFromFileOptional("DifficultyListP2","DifficultyListP2");
 
 --Stage BG
 t[#t+1] = Def.ActorFrame {
@@ -96,99 +94,9 @@ t[#t+1] = Def.ActorFrame {
 	LoadActor( "sideeffect.lua" );
 };
 
--- Legacy StepMania 4 Function
---???
-local function StepsDisplay(pn)
-	local function set(self, player)
-		self:SetFromGameState( player );
-	end
-
-	local t = Def.StepsDisplay {
-		InitCommand=cmd(Load,"StepsDisplay",GAMESTATE:GetPlayerState(pn););
-	};
-
-	if pn == PLAYER_1 then
-		t.CurrentStepsP1ChangedMessageCommand=function(self) set(self, pn); end;
-		t.CurrentTrailP1ChangedMessageCommand=function(self) set(self, pn); end;
-	else
-		t.CurrentStepsP2ChangedMessageCommand=function(self) set(self, pn); end;
-		t.CurrentTrailP2ChangedMessageCommand=function(self) set(self, pn); end;
-	end
-
-	return t;
-end
 t[#t+1] = StandardDecorationFromFileOptional("AlternateHelpDisplay","AlternateHelpDisplay");
 t[#t+1] = StandardDecorationFromFileOptional("BannerFrame","BannerFrame");
 
---default difficulty stuff
-local function GetDifListY(d)
-	local r=0;
-	if d == "Difficulty_Beginner" then
-		r=(42*0);
-	elseif d == "Difficulty_Easy" then
-		r=(42*1);
-	elseif d == "Difficulty_Medium" then
-		r=(42*2);
-	elseif d == "Difficulty_Hard" then
-		r=(42*3);
-	elseif d == "Difficulty_Challenge" then
-		r=(42*4);
-	elseif d == "Difficulty_Edit" then
-		r=(42*5);
-	end;
-	return r;
-end;
-
-local function GetDifListX(self,pn,offset,fade)
-	if pn==PLAYER_1 then
-		self:x(SCREEN_LEFT+150-offset);
-		if fade>0 then
-			self:faderight(fade);
-		end;
-	else
-		self:x(SCREEN_RIGHT-150+offset);
-		if fade>0 then
-			self:fadeleft(fade);
-		end;
-	end;
-	return r;
-end;
-
-local function DrawDifList(pn,diff)
-	local t=Def.ActorFrame {
-		InitCommand=cmd(player,pn;y,SCREEN_CENTER_Y-150-43.5-25);
---meter
-	LoadFont("_itc avant garde std bk 20px")..{
-		InitCommand=cmd(diffuse,color("#000000");strokecolor,Color("White");zoom,0.9);
-		SetCommand=function(self)
-		local st=GAMESTATE:GetCurrentStyle():GetStepsType();
-		local song=GAMESTATE:GetCurrentSong();
-		local course = GAMESTATE:GetCurrentCourse();
-
-		if song then
-			GetDifListX(self,pn,110,0);
-			self:y(GetDifListY(diff, st, song));
-			if song:HasStepsTypeAndDifficulty(st,diff) then
-			local steps = song:GetOneSteps( st, diff );
-				self:settext(steps:GetMeter());
-			else
-				self:settext("");
-			end;
-
-		else
-			self:settext("");
-		end;
-		end;
-	CurrentSongChangedMessageCommand=cmd(playcommand,"Set");
-	CurrentStepsP1ChangedMessageCommand=cmd(playcommand,"Set");
-	CurrentStepsP2ChangedMessageCommand=cmd(playcommand,"Set");
-	CurrentTrailP1ChangedMessageCommand=cmd(playcommand,"Set");
-	CurrentTrailP2ChangedMessageCommand=cmd(playcommand,"Set");
-	CurrentCourseChangedMessageCommand=cmd(playcommand,"Set");
-	};
-	};
-	return t;
-end;
 
 if GAMESTATE:IsPlayerEnabled(PLAYER_1) then
 --Difficulty Info
@@ -546,7 +454,6 @@ end
 
 
 
-t[#t+1] = StandardDecorationFromFileOptional("DifficultyDisplay","DifficultyDisplay");
 t[#t+1] = StandardDecorationFromFileOptional("SortOrderFrame","SortOrderFrame") .. {
 
 };

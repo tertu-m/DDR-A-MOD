@@ -52,27 +52,24 @@ for idx,diff in pairs(Difficulty) do
 			else
 				meter=0;
 			end
-			
+
 		    c.Meter:settextf( "%01d", meter );
 			local curDiff1;
 			local curDiff2;
-			if GAMESTATE:IsPlayerEnabled(PLAYER_1) then 
-				 curDiff1 = GAMESTATE:GetCurrentSteps(PLAYER_1):GetDifficulty();
-			else
-				self:visible(0);
-			end
-			
-			
-			
-			if bHasStepsTypeAndDifficulty then
-				if curDiff1==diff or curDiff2==diff then
-					self:playcommand("Show");
+			if GAMESTATE:IsPlayerEnabled(PLAYER_1) then
+				curDiff1 = GAMESTATE:GetCurrentSteps(PLAYER_1):GetDifficulty();
+				if bHasStepsTypeAndDifficulty then
+					self:visible(true)
+					if curDiff1==diff or curDiff2==diff then
+						self:playcommand("Show");
+					else
+						self:playcommand("UnSelect");
+					end
 				else
-					self:playcommand("UnSelect");
-					
+					self:playcommand("Hide"):visible(false);
 				end
 			else
-				self:playcommand("Hide");
+				self:visible(false);
 			end
 
 
@@ -81,18 +78,18 @@ for idx,diff in pairs(Difficulty) do
 		CurrentTrailP1ChangedMessageCommand=cmd(queuecommand,"Set");
 		CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
 
-		
+
 		Def.Quad {--底圖
 			InitCommand=cmd(setsize,170,20;x,28-357;y,tLocation[sDifficulty];diffuse,color("#FFFFFF");diffusealpha,0.8);
 		};
-		
+
 		LoadActor("cursorborder")..{--選擇的邊框
 			ShowCommand=cmd(stoptweening;zoom,1;linear,0.2;diffusealpha,1;);
 			HideCommand=cmd(stoptweening;decelerate,0.2;shadowlength,0;diffusealpha,0);
 			InitCommand=cmd(x,28-357;y,tLocation[sDifficulty];shadowlength,0;zoom,1);
 			UnSelectCommand=cmd(stoptweening;decelerate,0.2;diffusealpha,0;zoom,1);
 		};
-		
+
 		LoadActor("cursorglow")..{--選擇的光暈
 			ShowCommand=cmd(stoptweening;zoom,1.2;linear,0.2;diffusealpha,1;zoomy,0.78;zoomx,1);
 			HideCommand=cmd(stoptweening;decelerate,0.2;shadowlength,0;diffusealpha,0);
@@ -100,7 +97,7 @@ for idx,diff in pairs(Difficulty) do
 			UnSelectCommand=cmd(stoptweening;decelerate,0.2;diffusealpha,0;zoom,1.2);
 		};
 		LoadActor("cursorline")..{
-			
+
 			ShowCommand=cmd(stoptweening;zoom,1.2;linear,0.2;diffusealpha,1;zoom,1);
 			HideCommand=cmd(stoptweening;decelerate,0.2;shadowlength,0;diffusealpha,0);
 			InitCommand=cmd(x,28-357;y,tLocation[sDifficulty];shadowlength,0;zoom,1;);
@@ -113,10 +110,10 @@ for idx,diff in pairs(Difficulty) do
 			InitCommand=cmd(x,28-377;y,tLocation[sDifficulty];shadowlength,0;zoom,0.4;zoomx,1.5);
 			UnSelectCommand=cmd(stoptweening;decelerate,0.2;shadowlength,0;diffuse,CustomDifficultyToColor( sDifficulty ));
 		};
-		
 
 
-		
+
+
 		LoadFont("_helvetica-compressed 32px") .. { --難度描述
 			Name="Meter";
 			Text=THEME:GetString("CustomDifficulty",ToEnumShortString(diff));
@@ -126,7 +123,7 @@ for idx,diff in pairs(Difficulty) do
 			UnSelectCommand=cmd(stoptweening;decelerate,0.2;shadowlength,0;diffuse,color("0,0,0,1");strokecolor, color( "0,0,0,0" );zoomx,0.40);
 		};
 
-		
+
 		LoadFont("_geo 95 20px") .. { --數字
 			Name="Meter";
 			Text="0";
@@ -135,7 +132,7 @@ for idx,diff in pairs(Difficulty) do
 			InitCommand=cmd(x,28-377;y,tLocation[sDifficulty]-7;shadowlength,1;zoomx,0.75;zoomy,0.8;strokecolor,CustomDifficultyToDarkColor(sDifficulty));
 			UnSelectCommand=cmd(stoptweening;decelerate,0.2;shadowlength,1.1;diffuse,color( "1,1,1,1" );strokecolor, color( "0,0,0,1" ));
 		};
-		
+
 
 		OffCommand=cmd(linear,0.25;addx,-100;);
 	};
@@ -144,7 +141,7 @@ for idx,diff in pairs(Difficulty) do
 			local c = self:GetChildren();
 			local song = GAMESTATE:GetCurrentSong()
 			local bHasStepsTypeAndDifficulty = false;
-			
+
 			local meter = "00";
 			if song then
 				local st = GAMESTATE:GetCurrentStyle():GetStepsType()
@@ -153,32 +150,33 @@ for idx,diff in pairs(Difficulty) do
 				if steps then
 					meter = steps:GetMeter();
 					append = ""
+				else
+					meter = "00";
 				end
 			else
 				meter="00";
 			end
-			
+
 		    c.Meter:settextf( "%01d", meter );
 			--c.Only1Meter:settextf( "%01d", meter );
 			--c.Meter:settext(meter );
 			local curDiff1;
 			local curDiff2;
-			
-			if GAMESTATE:IsPlayerEnabled(PLAYER_2) then 
+
+			if GAMESTATE:IsPlayerEnabled(PLAYER_2) then
 				curDiff2 = GAMESTATE:GetCurrentSteps(PLAYER_2):GetDifficulty();
-			else
-				self:visible(0);
-			end
-			
-			
-			if bHasStepsTypeAndDifficulty then
-				if curDiff1==diff or curDiff2==diff then
-					self:playcommand("Show");
+				if bHasStepsTypeAndDifficulty then
+					self:visible(true)
+					if curDiff1==diff or curDiff2==diff then
+						self:playcommand("Show");
+					else
+						self:playcommand("UnSelect");
+					end
 				else
-					self:playcommand("UnSelect");
+					self:playcommand("Hide"):visible(false);
 				end
 			else
-				self:playcommand("Hide");
+				self:visible(false);
 			end
 
 		end;
@@ -186,7 +184,7 @@ for idx,diff in pairs(Difficulty) do
 		CurrentTrailP2ChangedMessageCommand=cmd(queuecommand,"Set");
 		CurrentStepsP2ChangedMessageCommand=cmd(queuecommand,"Set");
 
-		
+
 		--底圖
 		Def.Quad {
 		InitCommand=cmd(setsize,170,20;x,-28+357;y,tLocation[sDifficulty];diffuse,color("#FFFFFF");diffusealpha,0.8);
@@ -208,21 +206,21 @@ for idx,diff in pairs(Difficulty) do
 		};
 		--選擇的光暈
 		LoadActor("cursorglow")..{
-			
+
 			ShowCommand=cmd(stoptweening;zoom,1.2;linear,0.2;diffusealpha,1;zoomy,0.78;zoomx,1);
 			HideCommand=cmd(stoptweening;decelerate,0.2;shadowlength,0;diffusealpha,0);
 			InitCommand=cmd(x,-28+357;y,tLocation[sDifficulty];shadowlength,0;zoom,1;diffuseshift;effectcolor2,color("1,1,1,0.5");effectcolor1,color("1,1,1,1"));
 			UnSelectCommand=cmd(stoptweening;decelerate,0.2;diffusealpha,0;zoom,1.2);
 		};
-		
+
 		LoadActor("cursorline")..{
-			
+
 			ShowCommand=cmd(stoptweening;zoom,1.2;linear,0.2;diffusealpha,1;zoom,1);
 			HideCommand=cmd(stoptweening;decelerate,0.2;shadowlength,0;diffusealpha,0);
 			InitCommand=cmd(x,-28+357;y,tLocation[sDifficulty];shadowlength,0;zoom,1;);
 			UnSelectCommand=cmd(stoptweening;decelerate,0.2;shadowlength,0;diffusealpha,0;zoom,1.2);
 		};
-		
+
 		--選擇中足圖樣
 		LoadActor("StepsDisplay ticks")..{
 			Name="Meter";
@@ -253,7 +251,7 @@ for idx,diff in pairs(Difficulty) do
 			InitCommand=cmd(x,-28+377;y,tLocation[sDifficulty]-7;shadowlength,1;zoomx,0.75;zoomy,0.8;strokecolor,CustomDifficultyToDarkColor(sDifficulty));
 			UnSelectCommand=cmd(stoptweening;decelerate,0.2;shadowlength,1.1;diffuse,color( "1,1,1,1" );strokecolor, color( "0,0,0,1" ));
 		};
-		
+
 		LoadFont("common normal") .. {--only 1 難度描述
 			Name="Diff";
 			Text=THEME:GetString("CustomDifficulty",ToEnumShortString(diff));
@@ -262,7 +260,7 @@ for idx,diff in pairs(Difficulty) do
 			InitCommand=cmd(x,99230;y,0;shadowlength,1;zoomx,1.20;zoomy,1.2;);
 			UnSelectCommand=cmd(stoptweening;decelerate,0.2;shadowlength,1.1;diffuse,color( "0.52,0.52,0.52,0" );strokecolor, color( "0.15,0.15,0.15,0" );zoomx,1.20);
 		};
-		
+
 		LoadFont("common normal") .. {--only 1 數字
 			Name="Only1Meter";
 			Text="0"; --(sDifficulty == "Edit") and "0 Edits" or "0";
@@ -273,6 +271,6 @@ for idx,diff in pairs(Difficulty) do
 		};
 		OffCommand=cmd(linear,0.25;addx,100;);
 	};
-	
+
 end
 return t
