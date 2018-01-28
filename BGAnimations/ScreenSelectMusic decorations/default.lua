@@ -15,7 +15,7 @@ t[#t+1]= LoadActor("../_music_out" ) .. {
 function ReadOrCreatePaneControlForPlayerSide(PlayerUID)
 	local PaneControlFile = RageFileUtil:CreateRageFile()
 	local MyValue2 = "";
-	if PaneControlFile:Open("Save/PaneControl/"..PlayerUID.."_PlayerSide.txt",1) then 
+	if PaneControlFile:Open("Save/PaneControl/"..PlayerUID.."_PlayerSide.txt",1) then
 		MyValue2 = PaneControlFile:Read();
 	else
 		PaneControlFile:Open("Save/PaneControl/"..PlayerUID.."_PlayerSide.txt",2);
@@ -30,9 +30,9 @@ end
 function ReadOrCreatePaneControlForAnotherSide(PlayerUID)
 	local PaneControlFile = RageFileUtil:CreateRageFile()
 	local MyValue2 = "";
-	if PaneControlFile:Open("Save/PaneControl/"..PlayerUID.."_AnotherSide.txt",1) then 
+	if PaneControlFile:Open("Save/PaneControl/"..PlayerUID.."_AnotherSide.txt",1) then
 		MyValue2 = PaneControlFile:Read();
-		
+
 	else
 		PaneControlFile:Open("Save/PaneControl/"..PlayerUID.."_AnotherSide.txt",2);
 		PaneControlFile:Write("ClosePanesA");
@@ -54,9 +54,12 @@ function SavePaneControl( PlayerUID, MyValue, Mode)
 		PaneControlFile4:Open("Save/PaneControl/"..PlayerUID.."_AnotherSide.txt",2);
 		PaneControlFile4:Write(tostring(MyValue));
 		PaneControlFile4:Close();
-		
+
 	end
 end;
+
+t[#t+1] = StandardDecorationFromFileOptional("DifficultyListP1","DifficultyListP1");
+t[#t+1] = StandardDecorationFromFileOptional("DifficultyListP2","DifficultyListP2");
 
 --Stage BG
 t[#t+1] = Def.ActorFrame {
@@ -161,7 +164,7 @@ local function DrawDifList(pn,diff)
 		local st=GAMESTATE:GetCurrentStyle():GetStepsType();
 		local song=GAMESTATE:GetCurrentSong();
 		local course = GAMESTATE:GetCurrentCourse();
-		
+
 		if song then
 			GetDifListX(self,pn,110,0);
 			self:y(GetDifListY(diff, st, song));
@@ -171,7 +174,7 @@ local function DrawDifList(pn,diff)
 			else
 				self:settext("");
 			end;
-			
+
 		else
 			self:settext("");
 		end;
@@ -222,7 +225,7 @@ if GAMESTATE:IsPlayerEnabled(PLAYER_1) then
 			OffCommand=cmd(stoptweening;linear,0.2;zoom,0);
 		}
 	};
-	
+
 end;
 
 if GAMESTATE:IsPlayerEnabled(PLAYER_2) then
@@ -292,7 +295,7 @@ t[#t+1] = LoadActor("scoresP1.lua")..{
 					(cmd(addx,-500;sleep,0.5;decelerate,0.5;addx,500))(self);
 					self:linear(0.5);
 					self:diffusealpha(1);
-					
+
 				elseif ReadOrCreatePaneControlForPlayerSide(PlayerUID)=="OpenPanes1" or ReadOrCreatePaneControlForPlayerSide(PlayerUID)=="ClosePanes" then
 					self:diffusealpha(0);
 				elseif ReadOrCreatePaneControlForPlayerSide(PlayerUID)=="OpenPanes2" then
@@ -318,10 +321,10 @@ t[#t+1] = LoadActor("scoresP1.lua")..{
 					end
 				end;
 			end;
-			
+
 			local style = GAMESTATE:GetCurrentStyle():GetStyleType()
 			local PlayerUID = PROFILEMAN:GetProfile(pn):GetGUID();
-			
+
 			if pn==PLAYER_1 then
 				if params.Name=="OpenPanes1" then
 					SavePaneControl( PlayerUID, params.Name, "PlayerSide");
@@ -329,12 +332,12 @@ t[#t+1] = LoadActor("scoresP1.lua")..{
 					SavePaneControl( PlayerUID, params.Name, "PlayerSide");
 				elseif params.Name=="OpenPanes3"then
 					SavePaneControl( PlayerUID, params.Name, "PlayerSide");
-				elseif params.Name=="ClosePanes" 
+				elseif params.Name=="ClosePanes"
 				then
 					SavePaneControl( PlayerUID, params.Name, "PlayerSide");
 				end;
 			end;
-			
+
 		end;
 		CurrentSongChangedMessageCommand=function(self)
 		local song = GAMESTATE:GetCurrentSong()
@@ -354,7 +357,7 @@ t[#t+1] = LoadActor("scoresP1.lua")..{
 				self:zoom(0);
 			end;
 		end;
-		
+
 };
 t[#t+1] = LoadActor("scoresP2.lua")..{
 		InitCommand=cmd(player,PLAYER_2;diffusealpha,0.9;draworder,0;x,SCREEN_LEFT+255;y,SCREEN_CENTER_Y+20;zoom,1.2);
@@ -365,7 +368,7 @@ t[#t+1] = LoadActor("scoresP2.lua")..{
 					(cmd(addx,500;sleep,0.5;decelerate,0.5;addx,-500))(self);
 					self:linear(0.5);
 					self:diffusealpha(1);
-					
+
 				elseif ReadOrCreatePaneControlForPlayerSide(PlayerUID)=="OpenPanes1" or ReadOrCreatePaneControlForPlayerSide(PlayerUID)=="ClosePanes" then
 					self:diffusealpha(0);
 				elseif ReadOrCreatePaneControlForPlayerSide(PlayerUID)=="OpenPanes2" then
@@ -391,10 +394,10 @@ t[#t+1] = LoadActor("scoresP2.lua")..{
 					end
 				end;
 			end;
-			
+
 			local style = GAMESTATE:GetCurrentStyle():GetStyleType()
 			local PlayerUID = PROFILEMAN:GetProfile(pn):GetGUID();
-			
+
 			if pn==PLAYER_2 then
 				if params.Name=="OpenPanes1" then
 					SavePaneControl( PlayerUID, params.Name, "PlayerSide");
@@ -402,14 +405,14 @@ t[#t+1] = LoadActor("scoresP2.lua")..{
 					SavePaneControl( PlayerUID, params.Name, "PlayerSide");
 				elseif params.Name=="OpenPanes3"then
 					SavePaneControl( PlayerUID, params.Name, "PlayerSide");
-				elseif params.Name=="ClosePanes" 
+				elseif params.Name=="ClosePanes"
 				then
 					SavePaneControl( PlayerUID, params.Name, "PlayerSide");
 				end;
 			end;
-			
+
 		end;
-		
+
 		CurrentSongChangedMessageCommand=function(self)
 		local song = GAMESTATE:GetCurrentSong()
 		local course = GAMESTATE:GetCurrentCourse()
@@ -445,7 +448,7 @@ t[#t+1] = StandardDecorationFromFileOptional("CourseContentsMyListP1","CourseCon
 				self:diffusealpha(1);
 			end;
 		end;
-		
+
 };
 
 t[#t+1] = StandardDecorationFromFileOptional("CourseContentsMyListP2","CourseContentsMyListP2")..{
@@ -485,51 +488,51 @@ if GAMESTATE:IsCourseMode() then
 		-- SetCommand=function(self)
 			-- local curSelection= nil;
 			-- local sAppend = "";
-			
+
 			-- if GAMESTATE:IsCourseMode() then
 				-- curSelection = GAMESTATE:GetCurrentCourse();
 				-- if curSelection then
 					-- sAppend = (curSelection:GetEstimatedNumStages() == 1) and "Stage" or "Stages";
 					-- self:visible(true);
 					-- self:settext( curSelection:GetEstimatedNumStages() .. " " .. sAppend);
-					
+
 				-- else
 					-- self:visible(false);
 				-- end;
 			-- else
 				-- self:visible(false);
 			-- end;
-			
+
 		-- end;
-		
+
 		-- CurrentCourseChangedMessageCommand=cmd(playcommand,"Set");
 	-- };
-	
+
 	t[#t+1] = LoadFont("_compacta blk bt 14px") ..{
 		InitCommand=cmd(horizalign,right;x,190;y,65;zoomx,2.6;zoomy,2.2;playcommand,"Set");
 		OnCommand=cmd(playcommand,"Set");
 		OffCommand=cmd(diffuse,1,1,1,1;sleep,0.05;diffuse,1,1,1,0;sleep,0.05;diffuse,1,1,1,1;sleep,0.05;diffuse,1,1,1,0;sleep,0.05;diffuse,1,1,1,1;sleep,0.05;diffuse,1,1,1,0;sleep,0.05;linear,0.05;diffusealpha,0);
-		
+
 		SetCommand=function(self)
 			local curSelection= nil;
 			local sAppend = "";
-			
+
 			if GAMESTATE:IsCourseMode() then
 				curSelection = GAMESTATE:GetCurrentCourse();
 				if curSelection then
 					sAppend = (curSelection:GetEstimatedNumStages() == 1) and "Stage" or "Stages";
 					self:visible(true);
 					self:settext( curSelection:GetEstimatedNumStages() .. " " .. sAppend);
-					
+
 				else
 					self:visible(false);
 				end;
 			else
 				self:visible(false);
 			end;
-			
+
 		end;
-		
+
 		CurrentCourseChangedMessageCommand=cmd(playcommand,"Set");
 	};
 end
@@ -576,7 +579,7 @@ t[#t+1] = Def.Quad{
 	local group;
 	local so = GAMESTATE:GetSortOrder();
 	if not GAMESTATE:IsCourseMode() then
-		if song then 
+		if song then
 			if so == "SortOrder_Group" then
 				self:diffuse(color("#195c64"));
 			elseif so == "SortOrder_Title" then
@@ -652,7 +655,7 @@ t[#t+1] = LoadFont("_helvetica-compressed 32px")..{
 				if SCREENMAN:GetTopScreen():GetNextScreenName()=="ScreenStageInformation" then
 					if SCREENMAN:GetTopScreen():GetPrevScreenName()~="ScreenSelectMusic" then
 					    wheel =SCREENMAN:GetTopScreen():GetMusicWheel();
-						if wheel then 
+						if wheel then
 							if not GAMESTATE:IsAnExtraStage() then
 								selgrp = wheel:GetSelectedSection();
 								groupName = TranslateGroupName(selgrp);
@@ -660,11 +663,11 @@ t[#t+1] = LoadFont("_helvetica-compressed 32px")..{
 						end
 					end;
 				end;
-				
+
 				if groupName== nil then
 					groupName=" ";
 				end
-				
+
 				if so == "SortOrder_Title" then
 						self:settext("Song Title/ "..groupName);
 				elseif so == "SortOrder_Artist" then
@@ -687,17 +690,17 @@ t[#t+1] = LoadFont("_helvetica-compressed 32px")..{
 						self:settext("Cleared Rank/ "..groupName);
 				elseif so == "SortOrder_Genre" then
 						self:settext("Genre/ "..groupName);
-				end;	
+				end;
 			end
 		else
 			self:settext("");
 		end
 	else
-		
+
 				local color_str= group_colors[GAMESTATE:GetSortOrder()] or "#000000"
 				self:maxwidth(260);
 				self:strokecolor(color(color_str));
-				
+
 				if so == "SortOrder_AllCourses" then
 						self:settext("All Course/");
 				elseif so == "SortOrder_Nonstop" then
@@ -709,14 +712,14 @@ t[#t+1] = LoadFont("_helvetica-compressed 32px")..{
 				end;
 			end;
 
-	end;	
-};	
+	end;
+};
 
 local function DrawRecordCourse(pn)
 	local t=Def.ActorFrame {
 		InitCommand=cmd(player,pn;y,SCREEN_CENTER_Y+138;addy,900;sleep,0.5;linear,0.05;addy,-900;);
 		--course=GAMESTATE:GetCurrentCourse();
-		--¤À¼Æ
+		--ï¿½ï¿½ï¿½ï¿½
 		Def.RollingNumbers {
 			File = THEME:GetPathF("_Bolster","21px");
 			InitCommand=cmd(shadowlength,0;zoom,1.0;strokecolor,Color("Outline"));
@@ -755,22 +758,22 @@ local function DrawRecordCourse(pn)
 					if pn==PLAYER_1 and topscore ~= 0  then
 						self:Load("RollingNumbersCourseData");
 						self:targetnumber(topscore);
-						
+
 					elseif pn==PLAYER_2 and topscore ~= 0  then
 						self:Load("RollingNumbersCourseData");
 						self:targetnumber(topscore);
-						
-						
-					else 
+
+
+					else
 						self:settextf("");
 					end;
 				else
-					self:settext("");			
+					self:settext("");
 				end;
 				self:diffuse(color("1,1,1,1"));
 				self:strokecolor(color("0.2,0.2,0.2,1"));
 			end;
-			
+
 			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
 			CurrentTrailP1ChangedMessageCommand=cmd(queuecommand,"Set");
 			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
@@ -778,7 +781,7 @@ local function DrawRecordCourse(pn)
 			CurrentStepsP2ChangedMessageCommand=cmd(queuecommand,"Set");
 			CurrentCourseChangedMessageCommand=cmd(queuecommand,"Set");
 		};
-		
+
 		--full combo
 		LoadActor(THEME:GetPathG("Player","Spin FullCombo"))..{
 			InitCommand=cmd(shadowlength,1;zoom,0;spin);
@@ -809,7 +812,7 @@ local function DrawRecordCourse(pn)
 					local topscore=0;
 					local temp=#scores;
 					if scores[1] then
-							for i=1,temp do 
+							for i=1,temp do
 
 								if scores[i] then
 									topscore = scores[i];
@@ -845,9 +848,9 @@ local function DrawRecordCourse(pn)
 											break;
 										end;
 										self:diffusealpha(0.8);
-									else 
+									else
 										self:diffusealpha(0);
-										
+
 									end;
 								else
 									self:diffusealpha(0);
@@ -858,11 +861,11 @@ local function DrawRecordCourse(pn)
 							self:diffusealpha(0);
 						end;
 				else
-					self:diffusealpha(0);		
+					self:diffusealpha(0);
 				end;
-				
+
 			end;
-			
+
 			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
 			CurrentTrailP1ChangedMessageCommand=cmd(queuecommand,"Set");
 			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
@@ -870,9 +873,9 @@ local function DrawRecordCourse(pn)
 			CurrentStepsP2ChangedMessageCommand=cmd(queuecommand,"Set");
 			CurrentCourseChangedMessageCommand=cmd(queuecommand,"Set");
 		};
-		
-		
-		--µû»ù
+
+
+		--ï¿½ï¿½ï¿½ï¿½
 		Def.Quad{
 			InitCommand=cmd(shadowlength,1;zoom,0.75;);
 			BeginCommand=cmd(playcommand,"Set");
@@ -903,7 +906,7 @@ local function DrawRecordCourse(pn)
 					local cursocre=0;
 					local temp=#scores;
 					if scores[1] then
-						for i=1,temp do 
+						for i=1,temp do
 							topgrade = scores[1]:GetGrade();
 							curgrade = scores[i]:GetGrade();
 							assert(topgrade);
@@ -933,11 +936,11 @@ local function DrawRecordCourse(pn)
 						self:diffusealpha(0);
 					end;
 				else
-					self:diffusealpha(0);		
+					self:diffusealpha(0);
 				end;
-				
+
 			end;
-			
+
 			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
 			CurrentTrailP1ChangedMessageCommand=cmd(queuecommand,"Set");
 			CurrentStepsP1ChangedMessageCommand=cmd(queuecommand,"Set");
@@ -945,11 +948,11 @@ local function DrawRecordCourse(pn)
 			CurrentStepsP2ChangedMessageCommand=cmd(queuecommand,"Set");
 			CurrentCourseChangedMessageCommand=cmd(queuecommand,"Set");
 		};
-		
-		
-	};	
-	
-	
+
+
+	};
+
+
 	return t;
 end;
 
@@ -977,7 +980,7 @@ t[#t+1] = LoadActor("detailP1")..{
 					(cmd(addx,-500;sleep,0.5;decelerate,0.5;addx,500))(self);
 					self:linear(0.5);
 					self:diffusealpha(1);
-					
+
 				elseif ReadOrCreatePaneControlForPlayerSide(PlayerUID)=="OpenPanes3" or ReadOrCreatePaneControlForPlayerSide(PlayerUID)=="ClosePanes" then
 					self:diffusealpha(0);
 				elseif ReadOrCreatePaneControlForPlayerSide(PlayerUID)=="OpenPanes2" then
@@ -1003,10 +1006,10 @@ t[#t+1] = LoadActor("detailP1")..{
 					end
 				end;
 			end;
-			
+
 			local style = GAMESTATE:GetCurrentStyle():GetStyleType()
 			local PlayerUID = PROFILEMAN:GetProfile(pn):GetGUID();
-			
+
 			if pn==PLAYER_1 then
 				if params.Name=="OpenPanes1" then
 					SavePaneControl( PlayerUID, params.Name, "PlayerSide");
@@ -1014,12 +1017,12 @@ t[#t+1] = LoadActor("detailP1")..{
 					SavePaneControl( PlayerUID, params.Name, "PlayerSide");
 				elseif params.Name=="OpenPanes3"then
 					SavePaneControl( PlayerUID, params.Name, "PlayerSide");
-				elseif params.Name=="ClosePanes" 
+				elseif params.Name=="ClosePanes"
 				then
 					SavePaneControl( PlayerUID, params.Name, "PlayerSide");
 				end;
 			end;
-			
+
 		end;
 		CurrentSongChangedMessageCommand=function(self)
 		local song = GAMESTATE:GetCurrentSong()
@@ -1040,7 +1043,7 @@ t[#t+1] = LoadActor("detailP1")..{
 			end;
 		end;
 		OffCommand=cmd(sleep,0.15;linear,0.25;addx,-500);
-		
+
 };
 t[#t+1] = LoadActor("detailP2")..{
 		InitCommand=cmd(player,PLAYER_2;diffusealpha,0.9;draworder,0;zoom,1);
@@ -1051,7 +1054,7 @@ t[#t+1] = LoadActor("detailP2")..{
 					(cmd(addx,500;sleep,0.5;decelerate,0.5;addx,-500))(self);
 					self:linear(0.5);
 					self:diffusealpha(1);
-					
+
 				elseif ReadOrCreatePaneControlForPlayerSide(PlayerUID)=="OpenPanes3" or ReadOrCreatePaneControlForPlayerSide(PlayerUID)=="ClosePanes" then
 					self:diffusealpha(0);
 				elseif ReadOrCreatePaneControlForPlayerSide(PlayerUID)=="OpenPanes2" then
@@ -1077,10 +1080,10 @@ t[#t+1] = LoadActor("detailP2")..{
 					end
 				end;
 			end;
-			
+
 			local style = GAMESTATE:GetCurrentStyle():GetStyleType()
 			local PlayerUID = PROFILEMAN:GetProfile(pn):GetGUID();
-			
+
 			if pn==PLAYER_2 then
 				if params.Name=="OpenPanes1" then
 					SavePaneControl( PlayerUID, params.Name, "PlayerSide");
@@ -1088,14 +1091,14 @@ t[#t+1] = LoadActor("detailP2")..{
 					SavePaneControl( PlayerUID, params.Name, "PlayerSide");
 				elseif params.Name=="OpenPanes3"then
 					SavePaneControl( PlayerUID, params.Name, "PlayerSide");
-				elseif params.Name=="ClosePanes" 
+				elseif params.Name=="ClosePanes"
 				then
 					SavePaneControl( PlayerUID, params.Name, "PlayerSide");
 				end;
 			end;
-			
+
 		end;
-		
+
 		CurrentSongChangedMessageCommand=function(self)
 		local song = GAMESTATE:GetCurrentSong()
 		local course = GAMESTATE:GetCurrentCourse()
@@ -1133,7 +1136,7 @@ if GAMESTATE:IsCourseMode() == false then
 				OffCommand=cmd(linear,0.1;zoom,0);
 			};
 		};
-		
+
 		t[#t+1] = LoadActor("radarNumP1")..{
 			InitCommand=cmd(diffusealpha,1;draworder,0;x,SCREEN_LEFT+160;y,SCREEN_CENTER_Y+60;zoom,1.5);
 			OnCommand=cmd(zoom,0;decelerate,0.5;zoom,0.5);
@@ -1148,7 +1151,7 @@ if GAMESTATE:IsCourseMode() == false then
 			OffCommand=cmd(linear,0.1;zoom,0;addx,-1100);
 	};
 
-		
+
 
 	t[#t+1] = StandardDecorationFromFileOptional( "GrooveRadarP1_Default", "GrooveRadarP1_Default" )..{
 		OnCommand=function(self)
@@ -1156,7 +1159,7 @@ if GAMESTATE:IsCourseMode() == false then
 			self:linear(0.5);
 			self:diffusealpha(1);
 		end;
-		
+
 	};
 	end
 	if GAMESTATE:IsPlayerEnabled(PLAYER_2) then
@@ -1184,8 +1187,8 @@ if GAMESTATE:IsCourseMode() == false then
 			end;
 			OffCommand=cmd(linear,0.1;zoom,0;addx,1100);
 			};
-			
-		
+
+
 
 
 
