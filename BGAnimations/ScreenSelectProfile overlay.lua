@@ -57,9 +57,9 @@ end;
 --�d�����e����---------------------------
 function LoadCard(cColor,cColor2,Player,IsJoinFrame)
 	local t = Def.ActorFrame {
-		LoadActor( THEME:GetPathG("ScreenSelectProfile","CardBackground") ) .. {
-			InitCommand=cmd(shadowlength,0;zoomy,0;diffuse,cColor);
-			OnCommand=cmd(sleep,0.3;linear,0.3;zoomy,1;);
+    LoadActor( THEME:GetPathG("ScreenSelectProfile","CardBackground") ) .. {
+			InitCommand=cmd(shadowlength,0;zoomx,0.62;zoomy,0;diffuse,cColor);
+			OnCommand=cmd(sleep,0.3;linear,0.3;zoomy,0.75;);
 			OffCommand=function(self)
 				if IsJoinFrame then
 					(cmd(sleep,0.5;linear,0.2;zoomy,0.100;diffusealpha,0))(self);
@@ -68,6 +68,11 @@ function LoadCard(cColor,cColor2,Player,IsJoinFrame)
 				end
 			end;
 		};
+  LoadActor( THEME:GetPathG("ScreenSelectProfile","CardBG02") ) .. {
+    InitCommand=cmd(shadowlength,0;zoomx,0.62;zoomy,0;y,-85;diffuse,cColor2);
+    OnCommand=cmd(sleep,0.5;linear,0.13;zoomy,0.85;);
+    OffCommand=cmd(linear,0.02;zoom,0.100;diffusealpha,0);
+   };
 		LoadActor( THEME:GetPathG("ScreenSelectProfile","LvBackground") ) .. {
 			InitCommand=cmd(shadowlength,0;zoom,0;y,-40;x,-90;diffuse,cColor2);
 			OnCommand=cmd(sleep,0.3;linear,0.3;zoom,1;);
@@ -88,12 +93,12 @@ function LoadCard(cColor,cColor2,Player,IsJoinFrame)
 		-- };
 
 
-		LoadActor( THEME:GetPathG("ScreenSelectProfile","DancerNameWord") ) .. {
-			InitCommand=cmd(shadowlength,0;zoom,0;y,-165;x,-69;diffuse,cColor2;);
-			OnCommand=cmd(sleep,0.3;linear,0.3;zoom,0.8;playcommand,"Animate");
-			OffCommand=cmd(stoptweening;linear,0.02;zoom,0.100;diffusealpha,0);
-			AnimateCommand=cmd(sleep,2;smooth,0.1;zoomx,0.85;smooth,0.1;zoomx,0.8;queuecommand,"Animate");
-		};
+		--LoadActor( THEME:GetPathG("ScreenSelectProfile","DancerNameWord") ) .. {
+			--InitCommand=cmd(shadowlength,0;zoom,0;y,-165;x,-69;diffuse,cColor2;);
+			--OnCommand=cmd(sleep,0.3;linear,0.3;zoom,0.8;playcommand,"Animate");
+			--OffCommand=cmd(stoptweening;linear,0.02;zoom,0.100;diffusealpha,0);
+			--AnimateCommand=cmd(sleep,2;smooth,0.1;zoomx,0.85;smooth,0.1;zoomx,0.8;queuecommand,"Animate");
+		--};
 
 		-- LoadActor( THEME:GetPathG("ScreenSelectProfile","TotalStagesWord") ) .. {
 			-- InitCommand=cmd(shadowlength,0;zoom,0;y,-115;x,-69;diffuse,cColor2;);
@@ -102,46 +107,46 @@ function LoadCard(cColor,cColor2,Player,IsJoinFrame)
 			-- AnimateCommand=cmd(sleep,2;smooth,0.1;zoomx,0.85;smooth,0.1;zoomx,0.8;queuecommand,"Animate");
 		-- };
 
-		LoadActor( THEME:GetPathG("ScreenSelectProfile","AbilityLevelWord") ) .. {
-			InitCommand=cmd(shadowlength,0;zoom,0;y,-115;x,-69;diffuse,cColor2;);
-			OnCommand=cmd(sleep,0.3;linear,0.3;zoom,0.8;playcommand,"Animate");
-			OffCommand=cmd(stoptweening;linear,0.02;zoom,0.100;diffusealpha,0);
-			AnimateCommand=cmd(sleep,2;smooth,0.1;zoomx,0.85;smooth,0.1;zoomx,0.8;queuecommand,"Animate");
-		};
+		--LoadActor( THEME:GetPathG("ScreenSelectProfile","AbilityLevelWord") ) .. {
+			--InitCommand=cmd(shadowlength,0;zoom,0;y,-115;x,-69;diffuse,cColor2;);
+			--OnCommand=cmd(sleep,0.3;linear,0.3;zoom,0.8;playcommand,"Animate");
+			--OffCommand=cmd(stoptweening;linear,0.02;zoom,0.100;diffusealpha,0);
+			--AnimateCommand=cmd(sleep,2;smooth,0.1;zoomx,0.85;smooth,0.1;zoomx,0.8;queuecommand,"Animate");
+		--};
 
-		LoadActor( THEME:GetPathG("ScreenSelectProfile","DDR-CodeWord") ) .. {
-			InitCommand=cmd(shadowlength,0;zoom,0;y,-90;x,-69;diffuse,cColor2;);
-			OnCommand=cmd(sleep,0.3;linear,0.3;zoom,0.8;playcommand,"Animate");
-			OffCommand=cmd(stoptweening;linear,0.02;zoom,0.100;diffusealpha,0);
-			AnimateCommand=cmd(sleep,2;smooth,0.1;zoomx,0.85;smooth,0.1;zoomx,0.8;queuecommand,"Animate");
-		};
+		--LoadActor( THEME:GetPathG("ScreenSelectProfile","DDR-CodeWord") ) .. {
+			--InitCommand=cmd(shadowlength,0;zoom,0;y,-90;x,-69;diffuse,cColor2;);
+			--OnCommand=cmd(sleep,0.3;linear,0.3;zoom,0.8;playcommand,"Animate");
+			--OffCommand=cmd(stoptweening;linear,0.02;zoom,0.100;diffusealpha,0);
+			--AnimateCommand=cmd(sleep,2;smooth,0.1;zoomx,0.85;smooth,0.1;zoomx,0.8;queuecommand,"Animate");
+		--};
 
 			--�W�U�ج[------------
-		LoadActor( THEME:GetPathG("ScreenSelectProfile","CardFrameA") )..{
-			Name = "Frame";
-			InitCommand=cmd(x,-3;y,0;zoom,0);
-			OnCommand=cmd(linear,0.3;zoom,0.82;linear,0.3;y,-186);
-			OffCommand=function(self)
-				if IsJoinFrame then
-					(cmd(sleep,0.5;linear,0.2;y,0.100;linear,0.2;diffusealpha,0))(self);
-				else
-					(cmd(linear,0.2;y,0.100;linear,0.2;diffusealpha,0))(self);
-				end
-			end;
+      LoadActor( THEME:GetPathG("ScreenSelectProfile","CardFrameA") )..{
+  			Name = "Frame";
+  			InitCommand=cmd(x,0;y,0;zoom,0);
+  			OnCommand=cmd(linear,0.3;zoom,0.82;linear,0.3;y,-187);
+  			OffCommand=function(self)
+  				if IsJoinFrame then
+  					(cmd(sleep,0.5;linear,0.2;y,0.100;linear,0.2;diffusealpha,0))(self);
+  				else
+  					(cmd(linear,0.2;y,0.100;linear,0.2;diffusealpha,0))(self);
+  				end
+  			end;
 
-		};
-		LoadActor( THEME:GetPathG("ScreenSelectProfile","CardFrameA") )..{
-			Name = "Frame";
-			InitCommand=cmd(x,-3;y,0;zoom,0);
-			OnCommand=cmd(linear,0.3;zoom,0.82;linear,0.3;y,186);
-			OffCommand=function(self)
-				if IsJoinFrame then
-					(cmd(sleep,0.5;linear,0.2;y,0.100;linear,0.2;diffusealpha,0))(self);
-				else
-					(cmd(linear,0.2;y,0.100;linear,0.2;diffusealpha,0))(self);
-				end
-			end;
-		};
+  		};
+      LoadActor( THEME:GetPathG("ScreenSelectProfile","CardFrameA") )..{
+  			Name = "Frame";
+  			InitCommand=cmd(x,0;y,0;zoom,0);
+  			OnCommand=cmd(linear,0.3;zoom,0.82;linear,0.3;y,196);
+  			OffCommand=function(self)
+  				if IsJoinFrame then
+  					(cmd(sleep,0.5;linear,0.2;y,0.100;zoomy,0.5;linear,0.05;diffusealpha,0))(self);
+  				else
+  					(cmd(linear,0.2;y,0.100;zoomy,0.5;linear,0.05;diffusealpha,0))(self);
+  				end
+  			end;
+  		};
 
 	};
 
@@ -359,133 +364,199 @@ function LoadPlayerStuff(Player)
 		-- OffCommand=cmd(linear,0.3;zoomy,0;diffusealpha,0);
 	-- };
 
+  t[#t+1] = LoadActor( THEME:GetPathG("ScreenSelectProfile","CardFrameWBase") )..{
+		Name = "FrameInstWBase";
+		InitCommand=cmd(x,0;y,189;zoom,0.85);
+		OnCommand=cmd(diffusealpha,0;sleep,0.55;linear,0.05;diffusealpha,1);
+		OffCommand=function(self)
+		(cmd(stoptweening;linear,0.05;;diffusealpha,0))(self);
+		end;
+	};
+	t[#t+1] = LoadActor( THEME:GetPathG("ScreenSelectProfile","CardFrameWord") )..{
+		Name = "FrameInstWord";
+		InitCommand=cmd(x,0;y,189;zoom,0.82);
+		OnCommand=cmd(diffusealpha,0;sleep,0.8;linear,0.3;diffusealpha,1);
+		OffCommand=function(self)
+		(cmd(stoptweening;linear,0.05;;diffusealpha,0))(self);
+		end;
+	};
 
-	t[#t+1] = LoadFont("_sveningsson Bold 60px") .. {
+  t[#t+1] = LoadFont("_helveticaneuelt pro 75 bd 60px") .. {
 		Name = 'SelectedProfileText';
-		InitCommand=cmd(horizalign,left;x,-102;y,-142;zoom,0.4;shadowlength,1;diffuse,color("1,1,1,0");strokecolor,Color("Outline");maxwidth,400);
+		InitCommand=cmd(horizalign,left;x,-112;y,-137;zoomx,0.45;zoomy,0.35;shadowlength,1;diffuse,color("1,1,1,0");strokecolor,Color("Outline");maxwidth,350);
 		OnCommand=cmd(sleep,0.8;linear,0.5;diffusealpha,1);
 		OffCommand=cmd(stoptweening;linear,0.01;zoomy,0;diffusealpha,0);
 	};
 
-	t[#t+1] = LoadFont("_sveningsson Bold 60px") .. {
+	t[#t+1] = LoadFont("enjoy number") .. {
 		Name = 'SelectedProfileLevel';
-		InitCommand=cmd(x,-92;y,-44;zoom,0;diffuse,color("1,1,1,1");diffusebottomedge,color("0.1,1,0.1,1");strokecolor,Color("Outline");maxwidth,50);
-		OnCommand=cmd(sleep,0.7;linear,0.05;diffusealpha,1;zoomy,0.8;zoomx,1;);
+		InitCommand=cmd(x,-90;y,-42;zoom,0;diffuse,color("1,1,1,1"));
+		OnCommand=cmd(sleep,0.7;linear,0.05;diffusealpha,1;zoomy,1;zoomx,1);
 		OffCommand=cmd(stoptweening;linear,0.1;zoomy,0;diffusealpha,0);
 	};
 
-	t[#t+1] = LoadFont("_sveningsson Bold 60px") .. {
+  t[#t+1] = LoadFont("_helveticaneuelt pro 75 bd 60px") .. {
 		Name = 'selectedTotalCaloriesBurned';
-		InitCommand=cmd(x,67;y,-42;zoom,0;diffuse,color("1,1,1,1");diffusebottomedge,color("1,1,0.1,1");strokecolor,Color("Outline");maxwidth,350);
-		OnCommand=cmd(sleep,0.9;linear,0.05;diffusealpha,1;zoomy,0.25;zoomx,0.2;);
+		InitCommand=cmd(x,80;y,-38;zoom,0;diffuse,color("1,1,1,1");diffusebottomedge,color("1,1,0.1,1");strokecolor,Color("Outline");maxwidth,350);
+		OnCommand=cmd(sleep,0.9;linear,0.05;diffusealpha,1;zoomy,0.3;zoomx,0.3;);
 		OffCommand=cmd(stoptweening;linear,0.1;zoomy,0;diffusealpha,0);
 	};
 
-	t[#t+1] = LoadFont("_sveningsson Bold 60px") .. {
+	t[#t+1] = LoadFont("_helveticaneuelt pro 75 bd 60px") .. {
 		Name = 'selectSongsPlayed';
 		InitCommand=cmd(x,50;y,-112;zoom,0;diffuse,color("1,1,1,1");diffusebottomedge,color("1,1,0.1,1");strokecolor,Color("Outline");maxwidth,150);
 		OnCommand=cmd(sleep,0.9;linear,0.05;diffusealpha,1;zoomy,0.3;zoomx,0.4;);
 		OffCommand=cmd(stoptweening;linear,0.1;zoomy,0;diffusealpha,0);
 	};
 
-	t[#t+1] = LoadFont("_sveningsson Bold 60px") .. {
+	t[#t+1] = LoadFont("_helveticaneuelt pro 75 bd 60px") .. {
 		Name = 'selectHonorName';
-		InitCommand=cmd(horizalign,center;skewx,-0.35;x,50;y,-115;zoom,0;diffuse,color("1,1,1,1");diffusebottomedge,color("1,1,0.8,1");strokecolor,Color("Outline");maxwidth,200);
-		OnCommand=cmd(sleep,0.9;linear,0.05;diffusealpha,1;zoomy,0.3;zoomx,0.3;);
+		InitCommand=cmd(horizalign,center;skewx,-0.35;x,85;y,-129;zoom,0;diffuse,color("1,1,1,1");diffusebottomedge,color("1,1,0.8,1");strokecolor,Color("Outline");maxwidth,200);
+		OnCommand=cmd(sleep,0.9;linear,0.05;diffusealpha,1;zoom,0.28;);
 		OffCommand=cmd(stoptweening;linear,0.1;zoomy,0;diffusealpha,0);
 	};
 
 
-
-	t[#t+1] = Def.Sprite{
+  t[#t+1] = Def.Sprite{
 		Name = 'selectedMostSongPlayed';
 		InitCommand=cmd(x,65;y,-32;zoom,0;scaletoclipped,0,0;);
 		OnCommand=cmd(sleep,0.9;linear,0.05;diffusealpha,1;diffuse,color("1,1,1,1");scaletoclipped,40,40;);
 		OffCommand=cmd(stoptweening;linear,0.1;scaletoclipped,0,0;);
 	};
 
-		t[#t+1] = Def.Sprite{
+	t[#t+1] = Def.Sprite{
 		Name = 'selectedHonorPic';
-		InitCommand=cmd(x,75;y,-149;zoom,0;scaletoclipped,0,0;);
-		OnCommand=cmd(sleep,0.9;linear,0.05;diffusealpha,1;scaletoclipped,50,50;);
+		InitCommand=cmd(x,30;y,-137;zoom,0;scaletoclipped,0,0;);
+		OnCommand=cmd(sleep,0.9;linear,0.05;diffusealpha,1;scaletoclipped,30,30;);
 		OffCommand=cmd(stoptweening;linear,0.1;scaletoclipped,0,0;);
 	};
 
 	t[#t+1] = LoadActor( THEME:GetPathG("ScreenSelectProfile","LvBar") ) .. {
 			Name = 'selectLvBarBack';
-			InitCommand=cmd(diffusealpha,0;y,0;x,-4);
-			OnCommand=cmd(sleep,0.3;linear,0.3;diffusealpha,1;diffuse,color("0.4,0.4,0.4,1"));
+			InitCommand=cmd(diffusealpha,0;y,1;x,0;zoom,1;zoomy,0.2);
+			OnCommand=cmd(diffusealpha,0;sleep,0.3;linear,0.3;diffusealpha,1;diffuse,color("0.4,0.4,0.4,1"));
 			OffCommand=cmd(stoptweening;linear,0.02;zoom,0.100;diffusealpha,0);
 
 	};
 
 	t[#t+1] = LoadActor( THEME:GetPathG("ScreenSelectProfile","LvBar") ) .. {
 			Name = 'selectLvBar';
-			InitCommand=cmd(diffusealpha,0;y,0;x,-4;cropright,1);
-			OnCommand=cmd(sleep,0.3;linear,0.3;diffusealpha,1;);
+			InitCommand=cmd(diffusealpha,0;y,1;x,0;cropright,1;zoom,1;zoomy,0.2);
+			OnCommand=cmd(diffusealpha,0;sleep,0.3;linear,0.3;diffusealpha,1;);
 			OffCommand=cmd(stoptweening;linear,0.02;zoom,0.100;diffusealpha,0);
 
 		};
 
 
-	t[#t+1]=LoadFont("_sveningsson Bold 60px") .. {
-		Name = 'selectTotalAttackrateWord';
-		InitCommand=cmd(x,-10;y,-62;zoom,0;diffuse,color("1,1,1,1");diffusebottomedge,color("1,1,0.1,1");strokecolor,Color("Outline");maxwidth,320);
-		OnCommand=function(self)
-			self:settext("Achievement / ");
-			(cmd(sleep,0.9;linear,0.05;diffusealpha,1;zoomy,0.15;zoomx,0.25))(self);
-		end;
-		OffCommand=cmd(stoptweening;linear,0.1;zoomy,0;diffusealpha,0);
-	};
+    t[#t+1]=LoadFont("_helveticaneuelt pro 75 bd 60px") .. {
+  		Name = 'selectTotalAttackrateWord';
+  		InitCommand=cmd(x,-10;y,-62;zoom,0;diffuse,color("1,1,1,1");diffusebottomedge,color("1,1,0.1,1");strokecolor,Color("Outline");maxwidth,320);
+  		OnCommand=function(self)
+  			self:settext(" ");
+  			(cmd(sleep,0.9;linear,0.05;diffusealpha,1;zoomy,0.15;zoomx,0.25))(self);
+  		end;
+  		OffCommand=cmd(stoptweening;linear,0.1;zoomy,0;diffusealpha,0);
+  	};
 
-	t[#t+1] = LoadFont("_sveningsson Bold 60px") .. {
-		Name = 'selectPercentComplete';
-		InitCommand=cmd(x,65;y,-62;zoom,0;diffuse,color("1,1,1,1");diffusebottomedge,color("1,1,0.1,1");strokecolor,Color("Outline");maxwidth,220);
-		OnCommand=cmd(sleep,0.9;linear,0.05;diffusealpha,1;zoomy,0.3;zoomx,0.35;);
-		OffCommand=cmd(stoptweening;linear,0.1;zoomy,0;diffusealpha,0);
-	};
-	t[#t+1]=LoadFont("_sveningsson Bold 60px") .. {
-		Name = 'selectTotalCalWord';
-		InitCommand=cmd(x,-10;y,-42;zoom,0;diffuse,color("1,1,1,1");diffusebottomedge,color("1,1,0.1,1");strokecolor,Color("Outline");maxwidth,320);
-		OnCommand=function(self)
-			self:settext("Today Burned / ");
-			(cmd(sleep,0.9;linear,0.05;diffusealpha,1;zoomy,0.15;zoomx,0.25))(self);
-		end;
-		OffCommand=cmd(stoptweening;linear,0.1;zoomy,0;diffusealpha,0);
-	};
-	t[#t+1]=LoadFont("_sveningsson Bold 60px") .. {
-		Name = 'selectRank';
-		InitCommand=cmd(x,20;y,-20;skewx,-0.35;zoom,0;diffuse,color("1,1,1,1");diffusebottomedge,color("1,1,1,1");strokecolor,Color("Outline");maxwidth,350);
-		OnCommand=function(self)
-			(cmd(sleep,0.9;linear,0.05;diffusealpha,1;zoomy,0.25;zoomx,0.25))(self);
-		end;
-		OffCommand=cmd(stoptweening;linear,0.1;zoomy,0;diffusealpha,0);
-	};
-
-	t[#t+1] = LoadFont("_sveningsson Bold 60px") .. {
-		Name = 'selectPlayerUID';
-		InitCommand=cmd(x,40;y,-90;zoom,0;diffuse,color("1,1,1,1");diffusebottomedge,color("1,1,0.9,1");strokecolor,Color("Outline");maxwidth,420);
-		OnCommand=cmd(sleep,0.9;linear,0.05;diffusealpha,1;zoomy,0.22;zoomx,0.27;);
-		OffCommand=cmd(stoptweening;linear,0.1;zoomy,0;diffusealpha,0);
-	};
+    t[#t+1]=LoadFont("_helveticaneuelt pro 75 bd 60px") .. {
+      Name = 'selectTotalAttackrateWord';
+      InitCommand=cmd(x,-10;y,-62;zoom,0;diffuse,color("1,1,1,1");diffusebottomedge,color("1,1,0.1,1");strokecolor,Color("Outline");maxwidth,320);
+      OnCommand=function(self)
+        self:settext(" ");
+        (cmd(sleep,0.9;linear,0.05;diffusealpha,1;zoomy,0.15;zoomx,0.25))(self);
+      end;
+      OffCommand=cmd(stoptweening;linear,0.1;zoomy,0;diffusealpha,0);
+    };
 
 
+    t[#t+1]=LoadFont("_helveticaneuelt pro 75 bd 60px") .. { --*****************************************************************************************************
+      Name = 'LVTitle';
+      InitCommand=cmd(x,-60;y,-67;zoom,0;diffuse,color("1,1,1,1");diffusebottomedge,color("1,1,0.1,1");strokecolor,Color("Outline");horizalign,left);
+      OnCommand=function(self)
+        self:settext("Dance LV.");
+        (cmd(sleep,0.9;linear,0.05;diffusealpha,1;zoomy,0.18;zoomx,0.18))(self);
+      end;
+      OffCommand=cmd(stoptweening;linear,0.1;zoomy,0;diffusealpha,0);
+    };
+    t[#t+1]=LoadFont("_helveticaneuelt pro 75 bd 60px") .. {
+      Name = 'SPLVTitle';
+      InitCommand=cmd(x,5;y,-67;zoom,0;diffuse,color("#12cff2");strokecolor,color("#12cff2");horizalign,left);
+      OnCommand=function(self)
+        self:settext("SP");
+        (cmd(sleep,0.9;linear,0.05;diffusealpha,1;zoomy,0.18;zoomx,0.18))(self);
+      end;
+      OffCommand=cmd(stoptweening;linear,0.1;zoomy,0;diffusealpha,0);
+    };
+    t[#t+1]=LoadFont("_helveticaneuelt pro 75 bd 60px") .. {
+      Name = 'DPLVTitle';
+      InitCommand=cmd(x,68;y,-67;zoom,0;diffuse,color("#f253ed");strokecolor,color("#f253ed");horizalign,left);
+      OnCommand=function(self)
+        self:settext("DP");
+        (cmd(sleep,0.9;linear,0.05;diffusealpha,1;zoomy,0.18;zoomx,0.18))(self);
+      end;
+      OffCommand=cmd(stoptweening;linear,0.1;zoomy,0;diffusealpha,0);
+    };
+    t[#t+1] = LoadFont("_helveticaneuelt pro 75 bd 60px") .. {
+      Name = 'SPLV';
+      InitCommand=cmd(x,39;y,-67;zoom,0;diffuse,color("1,1,1,1");diffusebottomedge,color("1,1,0.1,1");strokecolor,Color("Outline");maxwidth,100);
+      OnCommand=cmd(sleep,0.9;linear,0.05;diffusealpha,1;zoomy,0.3;zoomx,0.35;);
+      OffCommand=cmd(stoptweening;linear,0.1;zoomy,0;diffusealpha,0);
+    };
+    t[#t+1] = LoadFont("_helveticaneuelt pro 75 bd 60px") .. {
+      Name = 'DPLV';
+      InitCommand=cmd(x,102;y,-67;zoom,0;diffuse,color("1,1,1,1");diffusebottomedge,color("1,1,0.1,1");strokecolor,Color("Outline");maxwidth,100);
+      OnCommand=cmd(sleep,0.9;linear,0.05;diffusealpha,1;zoomy,0.3;zoomx,0.35;);
+      OffCommand=cmd(stoptweening;linear,0.1;zoomy,0;diffusealpha,0);
+    };
+
+    t[#t+1] = LoadFont("_helveticaneuelt pro 75 bd 60px") .. {
+  		Name = 'selectPercentComplete';
+  		InitCommand=cmd(x,75;y,-62;zoom,0;diffuse,color("1,1,1,1");diffusebottomedge,color("1,1,0.1,1");strokecolor,Color("Outline");maxwidth,220);
+  		OnCommand=cmd(sleep,0.9;linear,0.05;diffusealpha,1;zoomy,0.3;zoomx,0.35;);
+  		OffCommand=cmd(stoptweening;linear,0.1;zoomy,0;diffusealpha,0);
+  	};
+  	t[#t+1]=LoadFont("_helveticaneuelt pro 75 bd 60px") .. {
+  		Name = 'selectTotalCalWord';
+  		InitCommand=cmd(x,-10;y,-38;zoom,0;diffuse,color("1,1,1,1");diffusebottomedge,color("1,1,0.1,1");strokecolor,Color("Outline");maxwidth,320);
+  		OnCommand=function(self)
+  			self:settext("Today Burned / ");
+  			(cmd(sleep,0.9;linear,0.05;diffusealpha,1;zoomy,0.15;zoomx,0.25))(self);
+  		end;
+  		OffCommand=cmd(stoptweening;linear,0.1;zoomy,0;diffusealpha,0);
+  	};
+  	t[#t+1]=LoadFont("_helveticaneuelt pro 65 md 60px") .. {
+  		Name = 'selectRank';
+  		InitCommand=cmd(x,25;y,-15;skewx,-0.35;zoom,0;maxwidth,350);
+  		OnCommand=function(self)
+  			(cmd(sleep,0.9;linear,0.05;diffusealpha,1;zoomy,0.3;zoomx,0.3))(self);
+  		end;
+  		OffCommand=cmd(stoptweening;linear,0.1;zoomy,0;diffusealpha,0);
+  	};
+
+  	t[#t+1] = LoadFont("_helveticaneuelt pro 75 bd 60px") .. {
+  		Name = 'selectPlayerUID';
+  		InitCommand=cmd(x,35;y,-106;zoom,0;diffuse,color("1,1,1,1");diffusebottomedge,color("1,1,0.9,1");strokecolor,Color("Outline");maxwidth,420);
+  		OnCommand=cmd(sleep,0.9;linear,0.05;diffusealpha,1;zoomy,0.3;zoomx,0.45;);
+  		OffCommand=cmd(stoptweening;linear,0.1;zoomy,0;diffusealpha,0);
+  	};
 
 
-	t[#t+1] =LoadFont("_compacta blk bt 14px") .. {
-		InitCommand=cmd(x,0;y,-185;zoom,0;diffuse,color("1,1,1,1");strokecolor,Color("Outline");maxwidth,270;shadowlength,3);
-		OnCommand=function(self)
-			if Player== PLAYER_1 then
-				self:settext("PLAYER:1");
-				self:diffuse(ColorLightTone(PlayerColor(PLAYER_1)));
-			else
-				self:settext("PLAYER:2");
-				self:diffuse(PlayerColor(PLAYER_2));
-			end
-			(cmd(sleep,0.9;linear,0.05;diffusealpha,1;zoomy,1;zoomx,1.35))(self);
-		end;
-		OffCommand=cmd(stoptweening;linear,0.1;zoomy,0;diffusealpha,0);
-	};
+
+
+    t[#t+1] =LoadFont("_atilla Bold 16px") .. {
+  		InitCommand=cmd(x,0;y,-186;zoom,0;diffuse,color("1,1,1,1");strokecolor,Color("Outline");maxwidth,270;shadowlength,1);
+  		OnCommand=function(self)
+  			if Player== PLAYER_1 then
+  				self:settext("PLAYER:1");
+  				self:diffuse(ColorLightTone(PlayerColor(PLAYER_1)));
+  			else
+  				self:settext("PLAYER:2");
+  				self:diffuse(PlayerColor(PLAYER_2));
+  			end
+  			(cmd(sleep,0.9;linear,0.05;diffusealpha,1;zoomy,0.8;zoomx,1.35))(self);
+  		end;
+  		OffCommand=cmd(stoptweening;linear,0.1;zoomy,0;diffusealpha,0);
+  	};
 	------MyGrooveRadar
 	if (Player == PLAYER_1) then
 		t[#t+1] = LoadActor( THEME:GetPathG("ScreenSelectProfile", "GrooveRadar" ),1,0.2,0.2,0.2,0.5,PLAYER_1,'single')..{
@@ -650,11 +721,13 @@ end;
 function UpdateInternal3(self, Player)
 	local pn = (Player == PLAYER_1) and 1 or 2;
 	local frame = self:GetChild(string.format('P%uFrame', pn));
+
 	local scroller = frame:GetChild('Scroller');
 	local seltext = frame:GetChild('SelectedProfileText');
 	local joinframe = frame:GetChild('JoinFrame');
 	local smallframe = frame:GetChild('SmallFrame');
 	local bigframe = frame:GetChild('BigFrame');
+
 	local selLevel = frame:GetChild('SelectedProfileLevel');
 	local selTotalCalWord = frame:GetChild('selectTotalCalWord');
 	local selTotalCaloriesBurned = frame:GetChild('selectedTotalCaloriesBurned');
@@ -668,6 +741,13 @@ function UpdateInternal3(self, Player)
 	local selLvBar = frame:GetChild('selectLvBar');
 	local selPercentComplete = frame:GetChild('selectPercentComplete');
 	local selTotalAttackrateWord = frame:GetChild('selectTotalAttackrateWord');
+  local LVTitle = frame:GetChild('LVTitle');
+	local SPLVTitle = frame:GetChild('SPLVTitle');
+	local DPLVTitle = frame:GetChild('DPLVTitle');
+	local SPLV = frame:GetChild('SPLV');
+	local DPLV = frame:GetChild('DPLV');
+	local FrameInstWBase = frame:GetChild('FrameInstWBase');
+	local FrameInstWord = frame:GetChild('FrameInstWord');
 	--MyGrooveRadar
 	local selPlayerUID;
 	local selGVRDSingle = (Player == PLAYER_1) and frame:GetChild('GVRD1S') or frame:GetChild('GVRD2S');
@@ -690,7 +770,7 @@ function UpdateInternal3(self, Player)
 		frame:visible(true);
 		if MEMCARDMAN:GetCardState(Player) == 'MemoryCardState_none' then
 			--using profile if any
-			joinframe:visible(false);
+      joinframe:visible(false);
 			smallframe:visible(true);
 			bigframe:visible(false);
 			seltext:visible(true);
@@ -706,8 +786,16 @@ function UpdateInternal3(self, Player)
 			selHonorName:visible(true);
 			selLvBarBack:visible(true);
 			selLvBar:visible(true);
-			selPercentComplete:visible(true);
+			selPercentComplete:visible(false);
 			selTotalAttackrateWord:visible(true);
+			LVTitle:visible(true);
+			SPLVTitle:visible(true);
+			DPLVTitle:visible(true);
+			SPLV:visible(true);
+			DPLV:visible(true);
+			FrameInstWBase:visible(true);
+			FrameInstWord:visible(true);
+
 			selGVRDSingle:visible(true);
 			selGVRDDouble:visible(true);
 			selGVRDValue_S1:visible(true);
@@ -726,8 +814,44 @@ function UpdateInternal3(self, Player)
 
 			if ind > 0 then
 				local profile = PROFILEMAN:GetLocalProfileFromIndex(ind-1);
+        selPlayerUID = PROFILEMAN:GetLocalProfileFromIndex(ind-1):GetGUID();
 				local PcntCompleteSingle = ProfileInfoCache[ind].SongsAndCoursesPercentCompleteAllDifficultiesSingle;
 				local PcntCompleteDouble = ProfileInfoCache[ind].SongsAndCoursesPercentCompleteAllDifficultiesDouble;
+
+        ----***********************************Set SPLV+DPLV
+        local LVSingle = 0;
+        local LVDouble = 0;
+
+        local DanceLVFile = RageFileUtil:CreateRageFile()
+        if DanceLVFile:Open("Save/DanceLV/"..selPlayerUID.."_SP.txt",1) then --SPLV--
+          local str = DanceLVFile:Read();
+          CurrentValue = tonumber(str);
+          SPLV:settext(string.format("%0.2f", CurrentValue*10));
+          LVSingle=CurrentValue;
+          DanceLVFile:Close();
+        else
+          DanceLVFile:Open("Save/DanceLV/"..selPlayerUID.."_SP.txt",2)
+          SPLV:settext("0.0");
+          DanceLVFile:Write("0.0");
+          DanceLVFile:Close();
+        end
+
+        if DanceLVFile:Open("Save/DanceLV/"..selPlayerUID.."_DP.txt",1) then --DPLV--
+          local str = DanceLVFile:Read();
+          CurrentValue = tonumber(str);
+          DPLV:settext(string.format("%0.2f", CurrentValue*10));
+          LVDouble=CurrentValue;
+          DanceLVFile:Close();
+        else
+          DanceLVFile:Open("Save/DanceLV/"..selPlayerUID.."_DP.txt",2)
+          DPLV:settext("0.0");
+          DanceLVFile:Write("0.0");
+          DanceLVFile:Close();
+        end
+
+
+        ----***********************************Set SPLV+DPLV End
+
 				--HonorName
 
 				if PcntCompleteSingle>PcntCompleteDouble then
@@ -918,6 +1042,13 @@ function UpdateInternal3(self, Player)
 					selLvBar:visible(false);
 					selPercentComplete:visible(false);
 					selTotalAttackrateWord:visible(false);
+					LVTitle:visible(false);
+					SPLVTitle:visible(false);
+					DPLVTitle:visible(false);
+					SPLV:visible(false);
+					DPLV:visible(false);
+          FrameInstWBase:visible(false);
+			    FrameInstWord:visible(false);
 
 					selGVRDSingle:visible(false);
 					selGVRDValue_S1:visible(false);
@@ -959,6 +1090,13 @@ function UpdateInternal3(self, Player)
 		selLvBar:visible(false);
 		selPercentComplete:visible(false);
 		selTotalAttackrateWord:visible(false);
+    LVTitle:visible(false);
+		SPLVTitle:visible(false);
+		DPLVTitle:visible(false);
+		SPLV:visible(false);
+		DPLV:visible(false);
+		FrameInstWBase:visible(false);
+		FrameInstWord:visible(false);
 
 		selGVRDSingle:visible(false);
 		selGVRDValue_S1:visible(false);

@@ -5,7 +5,7 @@ local t = LoadFallbackB();
 function ReadOrCreatePaneControlEvaluationForPlayerSide(PlayerUID)
 	local PaneControlFile = RageFileUtil:CreateRageFile()
 	local MyValue2 = "";
-	if PaneControlFile:Open("Save/PaneControlEvaluation/"..PlayerUID.."_PlayerSide.txt",1) then 
+	if PaneControlFile:Open("Save/PaneControlEvaluation/"..PlayerUID.."_PlayerSide.txt",1) then
 		MyValue2 = PaneControlFile:Read();
 	else
 		PaneControlFile:Open("Save/PaneControlEvaluation/"..PlayerUID.."_PlayerSide.txt",2);
@@ -20,9 +20,9 @@ end
 function ReadOrCreatePaneControlEvaluationForAnotherSide(PlayerUID)
 	local PaneControlFile = RageFileUtil:CreateRageFile()
 	local MyValue2 = "";
-	if PaneControlFile:Open("Save/PaneControlEvaluation/"..PlayerUID.."_AnotherSide.txt",1) then 
+	if PaneControlFile:Open("Save/PaneControlEvaluation/"..PlayerUID.."_AnotherSide.txt",1) then
 		MyValue2 = PaneControlFile:Read();
-		
+
 	else
 		PaneControlFile:Open("Save/PaneControlEvaluation/"..PlayerUID.."_AnotherSide.txt",2);
 		PaneControlFile:Write("ClosePanesA");
@@ -44,13 +44,13 @@ function SavePaneControlEvaluation( PlayerUID, MyValue, Mode)
 		PaneControlFile4:Open("Save/PaneControlEvaluation/"..PlayerUID.."_AnotherSide.txt",2);
 		PaneControlFile4:Write(tostring(MyValue));
 		PaneControlFile4:Close();
-		
+
 	end
 end;
 
 --Show or Not Show Panel in OnCommand
 function PanelOnCommandControlEvaluation(Code, self, pn)
-	if GAMESTATE:IsPlayerEnabled(PLAYER_1) then
+	if GAMESTATE:IsPlayerEnabled(pn) then
 		local PlayerUID = PROFILEMAN:GetProfile(pn):GetGUID();
 		if ReadOrCreatePaneControlEvaluationForPlayerSide(PlayerUID)== Code then
 			self:diffusealpha(1);
@@ -83,7 +83,7 @@ t[#t+1] = LoadActor("p2result")..{
 		InitCommand=cmd(x,SCREEN_RIGHT-65;y,SCREEN_CENTER_Y-268-2;player,PLAYER_2;zoom,1.25);
 		OffCommand=cmd(linear,0.15;addx,300);
 	};
---------µû»ù­Iª©----------
+--------ï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½----------
 t[#t+1] = LoadActor( THEME:GetPathS("ScreenEvaluation", "music") ) .. {
 		OnCommand=cmd(play);
 	};
@@ -100,18 +100,18 @@ t[#t+1] = LoadActor( THEME:GetPathS("ScreenOptions","change" ) ) .. {
 		elseif params.Name=="OpenPanes4"then
 			self:play();
 		elseif params.Name=="ClosePanes"then
-			self:stop();	
+			self:stop();
 		end;
-		
-		
-		
+
+
+
 	end;
 };
 
 --SaveCodesWhenPressCode
-t[#t+1] = Def.Quad{  
+t[#t+1] = Def.Quad{
 	CodeMessageCommand=function(self,params)
-		local pn = params.PlayerNumber 
+		local pn = params.PlayerNumber
 		local PlayerUID = PROFILEMAN:GetProfile(pn):GetGUID();
 		if params.Name=="OpenPanes1" then
 			SavePaneControlEvaluation( PlayerUID, params.Name, "PlayerSide");
@@ -132,7 +132,7 @@ t[#t+1] = LoadActor("DefaultFrame.png")..{
 	InitCommand=cmd(y,SCREEN_CENTER_Y+160-7;x,SCREEN_CENTER_X-330+80+5;visible,GAMESTATE:IsHumanPlayer(PLAYER_1);zoom,0.675);
 	OffCommand=cmd(sleep,0.2;linear,0.2;addx,-700);
 };
-t[#t+1] = LoadActor("judgment")..{
+t[#t+1] = LoadActor("judgebg.lua")..{
 	InitCommand=cmd(y,SCREEN_CENTER_Y+160-7;x,SCREEN_CENTER_X-245;visible,GAMESTATE:IsHumanPlayer(PLAYER_1);diffusealpha,0;zoom,0.675);
 	OffCommand=cmd(sleep,0.2;linear,0.2;addx,-700);
 	OnCommand=function(self)
@@ -243,7 +243,7 @@ t[#t+1] = LoadActor("DefaultFrame.png")..{
 	OffCommand=cmd(sleep,0.2;linear,0.2;addx,700);
 };
 
-t[#t+1] = LoadActor("judgment")..{
+t[#t+1] = LoadActor("judgebg.lua")..{
 	InitCommand=cmd(y,SCREEN_CENTER_Y+160-7;x,SCREEN_CENTER_X+245;visible,GAMESTATE:IsHumanPlayer(PLAYER_2);diffusealpha,0;zoom,0.675);
 	OnCommand=function(self)
 		PanelOnCommandControlEvaluation("OpenPanes2", self, PLAYER_2);
@@ -348,10 +348,12 @@ t[#t+1] = LoadActor("CodeFrame 1x4.png")..{
 		end;
 	end;
 	};
-t[#t+1] = LoadActor("grade")..{
-	InitCommand=cmd(diffusealpha,1;draworder,11;addy,-15-10-40-15);
-	OffCommand=cmd(sleep,0.2;linear,0.2;diffusealpha,0);
-};
+for _, pn in pairs(GAMESTATE:GetEnabledPlayers()) do
+	t[#t+1] = LoadActor("grade", pn)..{
+		InitCommand=cmd(diffusealpha,1;draworder,11;addy,-15-10-40-15);
+		OffCommand=cmd(sleep,0.2;linear,0.2;diffusealpha,0);
+	};
+end;
 t[#t+1] = Def.ActorFrame{
 	InitCommand=cmd(diffusealpha,1;draworder,11;addx,110-20;addy,-30);
 	OffCommand=cmd(sleep,0.2;linear,0.2;diffusealpha,0);
@@ -377,10 +379,10 @@ t[#t+1] = Def.ActorFrame{
 		InitCommand=cmd(player,PLAYER_1;x,SCREEN_CENTER_X-355+140;y,SCREEN_CENTER_Y+180;zoom,0;diffusealpha,0);
 		OnCommand=function(self)
 		local pssp1 = STATSMAN:GetCurStageStats():GetPlayerStageStats("PlayerNumber_P1")
-			if pssp1:FullComboOfScore('TapNoteScore_W4') and 
+			if pssp1:FullComboOfScore('TapNoteScore_W4') and
 			not pssp1:FullComboOfScore('TapNoteScore_W3') and
 			not pssp1:FullComboOfScore('TapNoteScore_W2') and
-			not pssp1:FullComboOfScore('TapNoteScore_W1') 
+			not pssp1:FullComboOfScore('TapNoteScore_W1')
 			then
 				(cmd(sleep,0.316;linear,0.266;diffusealpha,1;zoom,1))(self);
 			end;
@@ -404,7 +406,7 @@ t[#t+1] = Def.ActorFrame{
 		CodeMessageCommand=function(self,params)
 			PanelCodeMessageControlEvaluation("OpenPanes1", self, params, PLAYER_1)
 		end;
-	};	
+	};
 	LoadActor("PFC")..{
 		InitCommand=cmd(player,PLAYER_1;x,SCREEN_CENTER_X-355+140;y,SCREEN_CENTER_Y+180;zoom,0;diffusealpha,0);
 		OnCommand=function(self)
@@ -460,10 +462,10 @@ t[#t+1] = Def.ActorFrame{
 		InitCommand=cmd(player,PLAYER_2;x,SCREEN_CENTER_X+355+40;y,SCREEN_CENTER_Y+180;zoom,0;diffusealpha,0);
 		OnCommand=function(self)
 		local pssp2 = STATSMAN:GetCurStageStats():GetPlayerStageStats("PlayerNumber_P2")
-			if pssp2:FullComboOfScore('TapNoteScore_W4') and 
+			if pssp2:FullComboOfScore('TapNoteScore_W4') and
 			not pssp2:FullComboOfScore('TapNoteScore_W3') and
 			not pssp2:FullComboOfScore('TapNoteScore_W2') and
-			not pssp2:FullComboOfScore('TapNoteScore_W1') and 
+			not pssp2:FullComboOfScore('TapNoteScore_W1') and
 			not GAMESTATE:PlayerIsUsingModifier(PLAYER_2,'little') then
 				(cmd(sleep,0.316;linear,0.266;diffusealpha,1;zoom,1))(self);
 			end;
@@ -487,7 +489,7 @@ t[#t+1] = Def.ActorFrame{
 			PanelCodeMessageControlEvaluation("OpenPanes1", self, params, PLAYER_2)
 		end;
 		OffCommand=cmd(linear,0.2;zoom,0);
-	};	
+	};
 	LoadActor("PFC")..{
 		InitCommand=cmd(player,PLAYER_2;x,SCREEN_CENTER_X+355+40;y,SCREEN_CENTER_Y+180;zoom,0;diffusealpha,0);
 		OnCommand=function(self)
@@ -627,8 +629,9 @@ t[#t+1] = LoadActor("kcalP2")..{
 	end;
 	};
 --StatsP1--
+if GAMESTATE:IsHumanPlayer(PLAYER_1) then
 t[#t+1] = LoadActor("statsP1")..{
-	InitCommand=cmd(visible,GAMESTATE:IsHumanPlayer(PLAYER_1);addy,185-3-6;zoom,1.2575;x,SCREEN_CENTER_X-270+80+20+5;diffusealpha,0);
+	InitCommand=cmd(addy,185-3-6;zoom,1.2575;x,SCREEN_CENTER_X-270+80+20+5;diffusealpha,0);
 	OnCommand=function(self)
 		PanelOnCommandControlEvaluation("OpenPanes2", self, PLAYER_1);
 	end;
@@ -650,10 +653,13 @@ t[#t+1] = LoadActor("statsP1")..{
 			end;
 		end;
 	end;
-	};
+};
+end;
+
 --StatsP2--
+if GAMESTATE:IsHumanPlayer(PLAYER_2) then
 t[#t+1] = LoadActor("statsP2")..{
-	InitCommand=cmd(visible,GAMESTATE:IsHumanPlayer(PLAYER_2);addy,185-3-6;zoom,1.2575;x,SCREEN_CENTER_X+390-80+20-5;diffusealpha,0);
+	InitCommand=cmd(addy,185-3-6;zoom,1.2575;x,SCREEN_CENTER_X+390-80+20-5;diffusealpha,0);
 	OnCommand=function(self)
 		PanelOnCommandControlEvaluation("OpenPanes2", self, PLAYER_2);
 	end;
@@ -675,7 +681,9 @@ t[#t+1] = LoadActor("statsP2")..{
 			end;
 		end;
 	end;
-	};
+};
+end;
+
 --Stage Info P1
 t[#t+1] = Def.Sprite{
 	InitCommand=cmd(y,SCREEN_CENTER_Y+160-10-40;x,SCREEN_CENTER_X-330+80;visible,GAMESTATE:IsHumanPlayer(PLAYER_1);diffusealpha,1;zoom,0.675);
@@ -805,7 +813,7 @@ t[#t+1] = Def.ActorFrame {
 						self:setsize(220,220);
 					end;
 				else
-					self:diffusealpha(0);	
+					self:diffusealpha(0);
 			end;
 		end;
 		end;
@@ -852,7 +860,7 @@ t[#t+1] = LoadFont("_itc avant garde std bk 20px")..{
 			self:diffuse(color("#f78c03"));
 		end;
 	end;
-	};	
+	};
 
 t[#t+1] = Def.RollingNumbers {
 			File = THEME:GetPathF("ScreenEvaluation", "ScoreNumber");
@@ -876,7 +884,7 @@ t[#t+1] = Def.RollingNumbers {
 		};
 
 
-		
+
 if ShowStandardDecoration("StepsDisplay") then
 	for pn in ivalues(PlayerNumber) do
 		local t2 = Def.StepsDisplay {
@@ -894,10 +902,10 @@ end
 for pn in ivalues(PlayerNumber) do
 	local MetricsName = "MachineRecord" .. PlayerNumberToString(pn);
 	t[#t+1] = LoadActor( THEME:GetPathG(Var "LoadingScreen", "MachineRecord"), pn ) .. {
-		InitCommand=function(self) 
-			self:player(pn); 
-			self:name(MetricsName); 
-			ActorUtil.LoadAllCommandsAndSetXY(self,Var "LoadingScreen"); 
+		InitCommand=function(self)
+			self:player(pn);
+			self:name(MetricsName);
+			ActorUtil.LoadAllCommandsAndSetXY(self,Var "LoadingScreen");
 		end;
 	};
 end
@@ -905,10 +913,10 @@ end
 for pn in ivalues(PlayerNumber) do
 	local MetricsName = "PersonalRecord" .. PlayerNumberToString(pn);
 	t[#t+1] = LoadActor( THEME:GetPathG(Var "LoadingScreen", "PersonalRecord"), pn ) .. {
-		InitCommand=function(self) 
-			self:player(pn); 
-			self:name(MetricsName); 
-			ActorUtil.LoadAllCommandsAndSetXY(self,Var "LoadingScreen"); 
+		InitCommand=function(self)
+			self:player(pn);
+			self:name(MetricsName);
+			ActorUtil.LoadAllCommandsAndSetXY(self,Var "LoadingScreen");
 		end;
 	};
 end
@@ -916,10 +924,10 @@ end
 for pn in ivalues(PlayerNumber) do
 	local MetricsName = "StageAward" .. PlayerNumberToString(pn);
 	t[#t+1] = LoadActor( THEME:GetPathG(Var "LoadingScreen", "StageAward"), pn ) .. {
-		InitCommand=function(self) 
-			self:player(pn); 
-			self:name(MetricsName); 
-			ActorUtil.LoadAllCommandsAndSetXY(self,Var "LoadingScreen"); 
+		InitCommand=function(self)
+			self:player(pn);
+			self:name(MetricsName);
+			ActorUtil.LoadAllCommandsAndSetXY(self,Var "LoadingScreen");
 		end;
 		BeginCommand=cmd(playcommand,"Set");
 		SetCommand=function(self)
@@ -937,10 +945,10 @@ end
 for pn in ivalues(PlayerNumber) do
 	local MetricsName = "PeakComboAward" .. PlayerNumberToString(pn);
 	t[#t+1] = LoadActor( THEME:GetPathG(Var "LoadingScreen", "PeakComboAward"), pn ) .. {
-		InitCommand=function(self) 
-			self:player(pn); 
-			self:name(MetricsName); 
-			ActorUtil.LoadAllCommandsAndSetXY(self,Var "LoadingScreen"); 
+		InitCommand=function(self)
+			self:player(pn);
+			self:name(MetricsName);
+			ActorUtil.LoadAllCommandsAndSetXY(self,Var "LoadingScreen");
 		end;
 		BeginCommand=cmd(playcommand,"Set");
 		SetCommand=function(self)
@@ -977,14 +985,14 @@ t[#t+1] = LoadFont("_arial black 28px")..{
 				song=GAMESTATE:GetCurrentSong();
 				tit=song:GetDisplayFullTitle();
 			end;
-			
+
 			if GAMESTATE:IsCourseMode() then
 				self:diffuse(color("#ffffff"))
 				self:strokecolor(color("#000000"))
-			elseif GAMESTATE:HasEarnedExtraStage() and GAMESTATE:IsExtraStage() and not GAMESTATE:IsExtraStage2() then	
+			elseif GAMESTATE:HasEarnedExtraStage() and GAMESTATE:IsExtraStage() and not GAMESTATE:IsExtraStage2() then
 				self:diffuse(color("#ffffff"))
 				self:strokecolor(color("#000000"))
-			elseif GAMESTATE:IsExtraStage() or GAMESTATE:IsExtraStage2() then 
+			elseif GAMESTATE:IsExtraStage() or GAMESTATE:IsExtraStage2() then
 				self:diffuse(color("#ffffff"))
 				self:strokecolor(color("#000000"))
 			else
@@ -1013,19 +1021,19 @@ t[#t+1] = LoadFont("_arial black 28px")..{
 			if GAMESTATE:IsCourseMode() then
 				song=GAMESTATE:GetCurrentCourse();
 				tit=song:GetDisplayFullTitle();
-				
+
 			else
 				song=GAMESTATE:GetCurrentSong();
 				tit=song:GetDisplayArtist();
 			end;
-			
+
 			if GAMESTATE:IsCourseMode() then
 				self:diffuse(color("#ffffff"))
 				self:strokecolor(color("#000000"))
-			elseif GAMESTATE:HasEarnedExtraStage() and GAMESTATE:IsExtraStage() and not GAMESTATE:IsExtraStage2() then	
+			elseif GAMESTATE:HasEarnedExtraStage() and GAMESTATE:IsExtraStage() and not GAMESTATE:IsExtraStage2() then
 				self:diffuse(color("#ffffff"))
 				self:strokecolor(color("#000000"))
-			elseif GAMESTATE:IsExtraStage() or GAMESTATE:IsExtraStage2() then 
+			elseif GAMESTATE:IsExtraStage() or GAMESTATE:IsExtraStage2() then
 				self:diffuse(color("#ffffff"))
 				self:strokecolor(color("#000000"))
 			else
@@ -1055,13 +1063,7 @@ t[#t+1] = Def.ActorFrame {
 		OnCommand=cmd(diffusealpha,0;zoom,1;linear,0.5;zoom,1;diffusealpha,1);
 		OffCommand = cmd(zoom,1;linear,0.03;zoom,1;diffusealpha,0;);
 	}
-	
-	
-	-- LoadActor( THEME:GetPathG("ScreenStageInformation","Stage extra1" ) ) .. {
-		-- Condition=THEME:GetMetric( Var "LoadingScreen","Summary" ) == false;
-		-- InitCommand=cmd(Center);
-		-- OnCommand=cmd(diffusealpha,0;zoom,0.85;bounceend,1;zoom,1;diffusealpha,1;sleep,0;glow,Color("White");decelerate,1;glow,Color("Invisible");smooth,0.35;zoom,0.25;y,SCREEN_BOTTOM-72);
-	-- };
+
 };
 t[#t+1] = Def.ActorFrame {
 	Condition=GAMESTATE:HasEarnedExtraStage() and not GAMESTATE:IsExtraStage() and GAMESTATE:IsExtraStage2();
@@ -1076,30 +1078,7 @@ t[#t+1] = Def.ActorFrame {
 		OnCommand=cmd(diffusealpha,0;zoom,1;linear,0.5;zoom,1;diffusealpha,1;diffuseshift;effectperiod,0.75;effectcolor1,color("1,1,1,1");effectcolor2,color("0.7,0.7,0.7,1"));
 		OffCommand = cmd(zoom,1;linear,0.03;zoom,1;diffusealpha,0;);
 	}
-	-- LoadActor( THEME:GetPathG("ScreenStageInformation","Stage extra2" ) ) .. {
-		-- Condition=THEME:GetMetric( Var "LoadingScreen","Summary" ) == false;
-		-- InitCommand=cmd(Center);
-		-- OnCommand=cmd(diffusealpha,0;zoom,0.85;bounceend,1;zoom,1;diffusealpha,1;sleep,0;glow,Color("White");decelerate,1;glow,Color("Invisible");smooth,0.35;zoom,0.25;y,SCREEN_BOTTOM-72);
-	-- };
 };
-
--- local StreamActualValue = (STATSMAN:GetCurStageStats():GetPlayerStageStats("PlayerNumber_P1"):GetRadarActual():GetValue("RadarCategory_Stream"))*(STATSMAN:GetCurStageStats():GetPlayerStageStats("PlayerNumber_P1"):GetRadarPossible():GetValue("RadarCategory_Stream"));
--- local VoltageActualValue = (STATSMAN:GetCurStageStats():GetPlayerStageStats("PlayerNumber_P1"):GetRadarActual():GetValue("RadarCategory_Voltage"))*(STATSMAN:GetCurStageStats():GetPlayerStageStats("PlayerNumber_P1"):GetRadarPossible():GetValue("RadarCategory_Voltage"));
--- local AirActualValue = (STATSMAN:GetCurStageStats():GetPlayerStageStats("PlayerNumber_P1"):GetRadarActual():GetValue("RadarCategory_Air"))*(STATSMAN:GetCurStageStats():GetPlayerStageStats("PlayerNumber_P1"):GetRadarPossible():GetValue("RadarCategory_Air"));
--- local FreezeActualValue = (STATSMAN:GetCurStageStats():GetPlayerStageStats("PlayerNumber_P1"):GetRadarActual():GetValue("RadarCategory_Freeze"))*(STATSMAN:GetCurStageStats():GetPlayerStageStats("PlayerNumber_P1"):GetRadarPossible():GetValue("RadarCategory_Freeze"));
--- local ChaosActualValue = (STATSMAN:GetCurStageStats():GetPlayerStageStats("PlayerNumber_P1"):GetRadarActual():GetValue("RadarCategory_Chaos"))*(STATSMAN:GetCurStageStats():GetPlayerStageStats("PlayerNumber_P1"):GetRadarPossible():GetValue("RadarCategory_Chaos"));
-
--- t[#t+1] = LoadFont("Common Normal")..{
-		-- Text="StreamActualValue:"..tostring(StreamActualValue);
-		-- InitCommand=cmd(Center;diffuse,color("1,1,1,1");shadowlength,1;y,620);
-		-- OffCommand=cmd(linear,0.15;diffusealpha,0);
-	-- };
--- t[#t+1] = LoadFont("Common Normal")..{
-		-- Text="ChaosActualValue:"..tostring(ChaosActualValue);
-		-- InitCommand=cmd(Center;diffuse,color("1,1,1,1");shadowlength,1;y,600);
-		-- OffCommand=cmd(linear,0.15;diffusealpha,0);
-	-- };
-
 t[#t+1] = LoadActor("SocreDiff")..{
 	InitCommand=cmd(zoom,1);
 };

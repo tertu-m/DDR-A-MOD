@@ -1,5 +1,12 @@
 local t = ...;
 t = Def.ActorFrame{
+	LoadActor("Back")..{
+	InitCommand=cmd(addx,348;addy,1;diffuseshift;effectcolor1,1,1,1,0.4;effectcolor2,1,1,1,0;effectclock,'beatnooffset');
+	};
+	LoadActor("Colour")..{
+	InitCommand=cmd(addx,348;addy,1;);
+	};
+	
 	Def.Sprite {
 	Texture="ScreenPlayerOptions LineHighlight P2 1x2";
 	
@@ -8,10 +15,8 @@ t = Def.ActorFrame{
 	
 	Frame0001=1;
 	Delay0001=0.5;
-	InitCommand=cmd(addx,458);
-	};
-	LoadActor("Colour.png")..{
-	InitCommand=cmd(addx,458-100+2;addy,1;zoomy,0.98;zoomx,1.007);
+	InitCommand=cmd(addx,262+160);
 	};	
+	
 };	
 return t;

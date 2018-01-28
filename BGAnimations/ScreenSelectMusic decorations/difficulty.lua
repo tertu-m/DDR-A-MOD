@@ -231,13 +231,13 @@ local function DrawDifListItem(diff)
 													local marvelous = topscore:GetTapNoteScore("TapNoteScore_W1")
 													local hasUsedLittle = string.find(topscore:GetModifiers(),"Little")
 													if (misses+boos) == 0 and scores[1]:GetScore() > 0 and (marvelous+perfects)>0 and (not hasUsedLittle) then
-															if (greats+perfects) == 0 then
+															if (goods+greats+perfects) == 0 then
 																	self:diffuse(GameColor.Judgment["JudgmentLine_W1"]);
 																	self:glowblink();
 																	self:effectperiod(0.20);
 																	self:zoom(0.25);
 																	break;
-															elseif greats == 0 then
+															elseif goods+greats == 0 then
 																	self:diffuse(GameColor.Judgment["JudgmentLine_W2"]);
 																	--self:glowshift();
 																	self:zoom(0.25);

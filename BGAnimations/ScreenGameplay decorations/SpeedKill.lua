@@ -114,6 +114,7 @@ t[#t+1] = Def.ActorFrame {
 		speedkills_Initialized = true;
 	end;
 	CodeMessageCommand = function(self, params)
+		
 		local pn = params.PlayerNumber;
 		local ps = GAMESTATE:GetPlayerState(pn);
 		local po = ps:GetPlayerOptions("ModsLevel_Preferred");
@@ -152,8 +153,10 @@ t[#t+1] = Def.ActorFrame {
 			xString = string.gsub(xString, "(%d+%.%d)0x", "%1x");
 			-- 1.0x -> 1x
 			xString = string.gsub(xString, "(%d+)%.0x", "%1x");
-
-			SCREENMAN:SystemMessage(string.format("%s: %s (m%.0f)", pn, xString, targetBPM[pn]));
+			
+			if params.Name == "SpeedUp" or params.Name == "SpeedDown" then
+				SCREENMAN:SystemMessage(string.format("%s: %s (m%.0f)", pn, xString, targetBPM[pn]));
+			end;
 		else
 			-- C-Mod and M-Mod
 			local speed = targetBPM[pn];
@@ -203,8 +206,12 @@ t[#t+1] = Def.ActorFrame {
 				format = "%s: %s%.0f (%s)";
 			end;
 
-			SCREENMAN:SystemMessage(string.format(format, pn, speedMode[pn], targetBPM[pn], xString));
+			if params.Name == "SpeedUp" or params.Name == "SpeedDown" then
+				SCREENMAN:SystemMessage(string.format(format, pn, speedMode[pn], targetBPM[pn], xString));
+			end;
 		end;
+		retrieveMeterType(); --In BGAnimations/ScreenGameplay decorations/OptionsHack.lua
+		SetGameplayMeterType(pn); --In BGAnimations/ScreenGameplay decorations/OptionsHack.lua
 	end;
 };
 

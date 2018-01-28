@@ -1,7 +1,11 @@
 local c;
 local player = Var "Player";
---local bShowProtiming = GetUserPrefB("UserPrefProtiming" .. ToEnumShortString(player) );
+-- local bShowProtiming = GetUserPrefB("UserPrefProtiming" .. ToEnumShortString(player) );
 local bShowProtiming = false;
+
+
+
+
 
 local function MakeAverage( t )
 	local sum = 0;
@@ -46,6 +50,15 @@ local TNSFrames = {
 	TapNoteScore_W5 = 4;
 	TapNoteScore_Miss = 5;
 };
+
+local showFasrSlow = true;
+
+if ThemePrefs.Get("Fast") == true then
+	showFasrSlow = true;
+else
+	showFasrSlow = false;
+end
+
 local t = Def.ActorFrame {};
 t[#t+1] = Def.ActorFrame {
 	LoadActor("deviation")..{
@@ -60,10 +73,12 @@ t[#t+1] = Def.ActorFrame {
 			end;
 		end;
 		JudgmentMessageCommand=function(self, params)
+			if not showFasrSlow then return end;
 			if params.Player ~= player then return end;
 			if params.TapNoteScore == 'TapNoteScore_W1' or params.TapNoteScore == 'TapNoteScore_W5' or params.TapNoteScore == 'TapNoteScore_Miss' or params.TapNoteScore == 'TapNoteScore_HitMine' or params.TapNoteScore == 'TapNoteScore_AvoidMine' or params.HoldNoteScore then return end;
 			self:finishtweening();
 			if params.Early then
+
 				self:setstate(0);
 			else
 				self:setstate(1);

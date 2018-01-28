@@ -9,10 +9,15 @@ local Good = STATSMAN:GetCurStageStats():GetPlayerStageStats(PLAYER_2):GetTapNot
 local Ok = STATSMAN:GetCurStageStats():GetPlayerStageStats(PLAYER_2):GetHoldNoteScores("HoldNoteScore_Held");
 local Miss = STATSMAN:GetCurStageStats():GetPlayerStageStats(PLAYER_2):GetTapNoteScores("TapNoteScore_Miss") + STATSMAN:GetCurStageStats():GetPlayerStageStats(PLAYER_2):GetTapNoteScores("TapNoteScore_W5");
 
+-- local Fast=ReadOrCreateFastNumForPlayer(PROFILEMAN:GetProfile(PLAYER_2):GetGUID(),Fast);
+-- local Slow=ReadOrCreateSlowNumForPlayer(PROFILEMAN:GetProfile(PLAYER_2):GetGUID(),Slow);
 
+local Fast=getenv(numFastP2);
+local Slow=getenv(numSlowP2);
 
 local Score = STATSMAN:GetCurStageStats():GetPlayerStageStats(PLAYER_2):GetScore();
-local EXScore = Marvelous*3 + Perfect*2 + Great*1 + Ok*3;
+-- local EXScore = Marvelous*3 + Perfect*2 + Great*1 + Ok*3;
+local EXScore = (STATSMAN:GetCurStageStats():GetPlayerStageStats(PLAYER_2):GetPossibleDancePoints())*(STATSMAN:GetCurStageStats():GetPlayerStageStats(PLAYER_2):GetPercentDancePoints())
 
 --Max Combo--
 t[#t+1] = LoadFont("_avantgarde-book 40px")..{
@@ -84,5 +89,26 @@ t[#t+1] = LoadFont("_avantgarde-book 40px")..{
 		self:diffuse(color("#ffffff"));
 	end;
 };
+
+
+--Fast/Slow
+if ThemePrefs.Get("Fast") == true then
+	t[#t+1] = LoadFont("_avantgarde-book 40px")..{
+		InitCommand=cmd(player,PLAYER_2;zoom,0.42;draworder,5;y,SCREEN_TOP+342-65;horizalign,right;addx,102);
+		OnCommand=function(self)
+			self:settextf(Fast);
+			self:diffuse(color("#000000"));
+			self:strokecolor(color("#ffffff"));
+		end;
+	};
+	t[#t+1] = LoadFont("_avantgarde-book 40px")..{
+		InitCommand=cmd(player,PLAYER_2;zoom,0.42;draworder,5;y,SCREEN_TOP+342-18;horizalign,right;addx,102);
+		OnCommand=function(self)
+			self:settextf(Slow);
+			self:diffuse(color("#000000"));
+			self:strokecolor(color("#ffffff"));
+		end;
+	};
+end
 
 return t;

@@ -50,7 +50,7 @@ t[#t+1] = Def.ActorFrame {
 t[#t+1] = Def.ActorFrame {
 	LoadActor( "scan" )..{
 		InitCommand=cmd(zoom,0.75);
-		OnCommand=cmd(x,SCREEN_CENTER_X-420;y,SCREEN_TOP+83;linear,1.5;addx,520;sleep,1;ztest,true;queuecommand,"On";diffusealpha,0;sleep,0.2;linear,0.2;diffusealpha,1);
+		OnCommand=cmd(diffusealpha,0;x,SCREEN_CENTER_X-420;y,SCREEN_TOP+83;;sleep,0.1;diffusealpha,1;linear,1.5;addx,520;sleep,0;diffusealpha,0;sleep,1;ztest,true;queuecommand,"On";sleep,0.2;linear,0.2;diffusealpha,1);
 		OffCommand=cmd(stoptweening;diffuse,1,1,1,1;sleep,0.05;diffuse,1,1,1,0;sleep,0.05;diffuse,1,1,1,1;sleep,0.05;diffuse,1,1,1,0;sleep,0.05;diffuse,1,1,1,1;sleep,0.05;diffuse,1,1,1,0;sleep,0.05;linear,0.05;diffusealpha,0);
 	};
 };
@@ -58,7 +58,7 @@ t[#t+1] = Def.ActorFrame {
 t[#t+1] = Def.ActorFrame {
 	LoadActor( "scan" )..{
 		InitCommand=cmd(zoom,0.75);
-		OnCommand=cmd(x,SCREEN_CENTER_X-420;y,SCREEN_TOP+83;linear,1.5;addx,520;sleep,1;ztest,true;queuecommand,"On";diffusealpha,0;sleep,0.2;linear,0.2;diffusealpha,1);
+		OnCommand=cmd(diffusealpha,0;x,SCREEN_CENTER_X-420;y,SCREEN_TOP+83;;sleep,0.1;diffusealpha,1;linear,1.5;addx,520;sleep,0;diffusealpha,0;sleep,1;ztest,true;queuecommand,"On";sleep,0.2;linear,0.2;diffusealpha,1);
 		OffCommand=cmd(stoptweening;diffuse,1,1,1,1;sleep,0.05;diffuse,1,1,1,0;sleep,0.05;diffuse,1,1,1,1;sleep,0.05;diffuse,1,1,1,0;sleep,0.05;diffuse,1,1,1,1;sleep,0.05;diffuse,1,1,1,0;sleep,0.05;linear,0.05;diffusealpha,0);
 	};
 };

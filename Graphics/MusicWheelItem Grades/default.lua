@@ -12,16 +12,16 @@ local grades = {
 	Grade_None = 8;
 };
 --arrange song position devide by 3
-function arrangeXPosition(myself, index)
-	if index%3==0 then
-		myself:x(-300);
-	elseif index%3==1 then
-		myself:x(0);
-	else
-		myself:x(300);
+-- function arrangeXPosition(myself, index)
+	-- if index%3==0 then
+		-- myself:x(-300);
+	-- elseif index%3==1 then
+		-- myself:x(0);
+	-- else
+		-- myself:x(300);
 		
-	end;
-end
+	-- end;
+-- end
 --[[ local t = LoadActor( "grades" ) .. {
 	InitCommand=cmd(pause);
 	SetGradeCommand=function(self, params)

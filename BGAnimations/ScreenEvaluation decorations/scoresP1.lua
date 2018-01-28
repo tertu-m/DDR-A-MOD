@@ -3,62 +3,62 @@ local t = Def.ActorFrame {};
 local function RivalScore(pn,rival)
 local t=Def.ActorFrame {
 InitCommand=cmd(addy,-30+3);
-	LoadFont("Common normal")..{
-		InitCommand=cmd(zoom,0.8;shadowlength,2;x,SCREEN_CENTER_X-245-135;y,SCREEN_CENTER_Y+80+4;horizalign,left;diffuse,color("White");strokecolor,color("#000000"));
-		BeginCommand=cmd(playcommand,"Set");
-		SetCommand=function(self)
-			local SongOrCourse, StepsOrTrail;
-			if GAMESTATE:IsCourseMode() then
-				SongOrCourse = GAMESTATE:GetCurrentCourse();
-				StepsOrTrail = GAMESTATE:GetCurrentTrail(pn);
-			else
-				SongOrCourse = GAMESTATE:GetCurrentSong();
-				StepsOrTrail = GAMESTATE:GetCurrentSteps(pn);
-			end;
+	-- LoadFont("_squareslab711 lt bt Bold 24px")..{
+		-- InitCommand=cmd(zoom,0.9;shadowlength,2;x,SCREEN_CENTER_X-245-135;y,SCREEN_CENTER_Y+80+4;horizalign,left;diffuse,color("White");strokecolor,color("#000000"));
+		-- BeginCommand=cmd(playcommand,"Set");
+		-- SetCommand=function(self)
+			-- local SongOrCourse, StepsOrTrail;
+			-- if GAMESTATE:IsCourseMode() then
+				-- SongOrCourse = GAMESTATE:GetCurrentCourse();
+				-- StepsOrTrail = GAMESTATE:GetCurrentTrail(pn);
+			-- else
+				-- SongOrCourse = GAMESTATE:GetCurrentSong();
+				-- StepsOrTrail = GAMESTATE:GetCurrentSteps(pn);
+			-- end;
 
-			local profile, scorelist;
-			local text = "";
-			if SongOrCourse and StepsOrTrail then
-				local st = StepsOrTrail:GetStepsType();
-				local diff = StepsOrTrail:GetDifficulty();
-				local courseType = GAMESTATE:IsCourseMode() and SongOrCourse:GetCourseType() or nil;
+			-- local profile, scorelist;
+			-- local text = "";
+			-- if SongOrCourse and StepsOrTrail then
+				-- local st = StepsOrTrail:GetStepsType();
+				-- local diff = StepsOrTrail:GetDifficulty();
+				-- local courseType = GAMESTATE:IsCourseMode() and SongOrCourse:GetCourseType() or nil;
 
-				if PROFILEMAN:IsPersistentProfile(pn) then
-					-- player profile
-					profile = PROFILEMAN:GetProfile(pn);
-					name = profile:GetDisplayName();
-				else
-					-- machine profile
-					profile = PROFILEMAN:GetMachineProfile();
-					name = "STEP";
-				end;
+				-- if PROFILEMAN:IsPersistentProfile(pn) then-- player profile
+					
+					-- profile = PROFILEMAN:GetProfile(pn);
+					-- name = profile:GetDisplayName();
+				-- else-- machine profile
+					
+					-- profile = PROFILEMAN:GetMachineProfile();
+					-- name = "STEP";
+				-- end;
 
-				scorelist = profile:GetHighScoreList(SongOrCourse,StepsOrTrail);
-				assert(scorelist)
-				local scores = scorelist:GetHighScores();
-				local topscore=0;
-				if scores[rival] then
-					topscore = scores[rival]:GetScore();
-				end;
-				assert(topscore);
-				if topscore ~= 0  then
-					self:settext(scores[rival]:GetName());
-				else
-					text = "- - - - - - -";
-				end;
-			else
-				text = "- - - - - - -";
-			end;
-			self:settext(text);
-		end;
-		CurrentSongChangedMessageCommand=cmd(playcommand,"Set");
-		CurrentCourseChangedMessageCommand=cmd(playcommand,"Set");
-		CurrentStepsP1ChangedMessageCommand=cmd(playcommand,"Set");
-		CurrentTrailP1ChangedMessageCommand=cmd(playcommand,"Set");
-	};
+				-- scorelist = profile:GetHighScoreList(SongOrCourse,StepsOrTrail);
+				-- assert(scorelist)
+				-- local scores = scorelist:GetHighScores();
+				-- local topscore=0;
+				-- if scores[rival] then
+					-- topscore = scores[rival]:GetScore();
+				-- end;
+				-- assert(topscore);
+				-- if topscore ~= 0  then
+					-- self:settext(scores[rival]:GetName());
+				-- else
+					-- text = "- - - - - - -";
+				-- end;
+			-- else
+				-- text = "- - - - - - -";
+			-- end;
+			-- self:settext(text);
+		-- end;
+		-- CurrentSongChangedMessageCommand=cmd(playcommand,"Set");
+		-- CurrentCourseChangedMessageCommand=cmd(playcommand,"Set");
+		-- CurrentStepsP1ChangedMessageCommand=cmd(playcommand,"Set");
+		-- CurrentTrailP1ChangedMessageCommand=cmd(playcommand,"Set");
+	-- };
 	Def.RollingNumbers {
-		File = THEME:GetPathF("Common", "normal");
-		InitCommand=cmd(zoom,0.8;shadowlength,2;x,SCREEN_CENTER_X-245+160;y,SCREEN_CENTER_Y+80;horizalign,right;diffuse,color("#000000");strokecolor,color("White"));
+		File = THEME:GetPathF("_geo 95", "20px");
+		InitCommand=cmd(zoom,1.4;shadowlength,0;x,SCREEN_CENTER_X-245+200;y,SCREEN_CENTER_Y+68;horizalign,right;diffuse,color("White"));
 		BeginCommand=cmd(playcommand,"Set");
 		SetCommand=function(self)
 			local SongOrCourse, StepsOrTrail;
@@ -104,7 +104,7 @@ InitCommand=cmd(addy,-30+3);
 		CurrentTrailP1ChangedMessageCommand=cmd(playcommand,"Set");
 	};
 	Def.Quad{
-	InitCommand=cmd(zoom,0.4;shadowlength,2;x,SCREEN_CENTER_X-245+22;y,SCREEN_CENTER_Y+80;horizalign,center;draworder,1);
+	InitCommand=cmd(zoom,0.34;shadowlength,2;x,SCREEN_CENTER_X-245+22-50;y,SCREEN_CENTER_Y+80;horizalign,center;draworder,1);
 		BeginCommand=cmd(playcommand,"Set");
 		SetCommand=function(self)
 			local SongOrCourse, StepsOrTrail;
@@ -168,7 +168,7 @@ InitCommand=cmd(addy,-30+3);
 		CurrentTrailP1ChangedMessageCommand=cmd(playcommand,"Set");
 	};
 	LoadActor(THEME:GetPathG("Player","Badge FullCombo"))..{
-	InitCommand=cmd(zoom,1;shadowlength,2;x,SCREEN_CENTER_X-245+22+22;y,SCREEN_CENTER_Y+80+8;horizalign,center;draworder,2);
+	InitCommand=cmd(zoom,1;shadowlength,2;x,SCREEN_CENTER_X-245+22+22-50;y,SCREEN_CENTER_Y+80+8;horizalign,center;draworder,2);
 		BeginCommand=cmd(playcommand,"Set");
 		SetCommand=function(self)
 			local SongOrCourse, StepsOrTrail;
@@ -211,24 +211,24 @@ InitCommand=cmd(addy,-30+3);
 						local perfects = topscore:GetTapNoteScore("TapNoteScore_W2")
 						local marvelous = topscore:GetTapNoteScore("TapNoteScore_W1")
 						local hasUsedLittle = string.find(topscore:GetModifiers(),"Little")
-						if (misses+boos) == 0 and scores[1]:GetScore() > 0 and (marvelous+perfects)>0 and (not hasUsedLittle) then
-							if (greats+perfects) == 0 then
+						if (misses+boos) == 0 and scores[1]:GetScore() > 0 and (marvelous+perfects)>0 and (not hasUsedLittle) and topscore:GetGrade()~="Grade_Failed" then
+							if (goods+greats+perfects) == 0 then
 								self:diffuse(GameColor.Judgment["JudgmentLine_W1"]);
 								self:glowblink();
 								self:effectperiod(0.20);
-								self:zoom(0.3);
-							elseif greats == 0 then
+								self:zoom(0.35);
+							elseif goods+greats == 0 then
 								self:diffuse(GameColor.Judgment["JudgmentLine_W2"]);
 								self:glowshift();
-								self:zoom(0.3);
+								self:zoom(0.35);
 							elseif (misses+boos+goods) == 0 then
 								self:diffuse(GameColor.Judgment["JudgmentLine_W3"]);
 								self:stopeffect();
-								self:zoom(0.3);
+								self:zoom(0.35);
 							elseif (misses+boos) == 0 then
 								self:diffuse(GameColor.Judgment["JudgmentLine_W4"]);
 								self:stopeffect();
-								self:zoom(0.3);
+								self:zoom(0.35);
 							end;
 							self:diffusealpha(1);
 						else
@@ -240,6 +240,8 @@ InitCommand=cmd(addy,-30+3);
 			else
 				self:diffusealpha(0);
 			end;
+			self:spin();
+			self:effectmagnitude(0,0,360);
 		end;
 		CurrentSongChangedMessageCommand=cmd(playcommand,"Set");
 		CurrentCourseChangedMessageCommand=cmd(playcommand,"Set");

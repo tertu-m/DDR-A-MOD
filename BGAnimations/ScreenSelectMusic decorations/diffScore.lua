@@ -7,7 +7,7 @@ local difficulties = {"Beginner", "Easy", "Medium", "Hard", "Challenge", "Edit"}
 
 local function GetDifListX(self,offset)
         if player==PLAYER_1 then
-                self:x(50+offset)
+                self:x(40+offset)
         elseif player==PLAYER_2 then
                 self:x(_screen.w-320+offset)
         end
@@ -81,17 +81,19 @@ local function DrawDifListItem(diff)
                 --score number
                 Def.RollingNumbers {
 						--File = THEME:GetPathF("_itc machine std", "20px");
-						File = THEME:GetPathF("common", "normal");
-                        InitCommand=cmd(zoom,0.7;draworder,5);
+						File = THEME:GetPathF("_geo 957", "Bold");
+                        InitCommand=cmd(y,-1;zoom,1;draworder,5);
                         BeginCommand=cmd(playcommand,"Set");
                         OffCommand=cmd(decelerate,0.05;diffusealpha,0;);
                         SetCommand=function(self)
-                                self:settext("")
+								--self:targetnumber(0);
+                                self:settext("");
+								self:diffusealpha(0);
                                
                                 local st=GAMESTATE:GetCurrentStyle():GetStepsType()
                                 local song=GAMESTATE:GetCurrentSong()
                                 local course = GAMESTATE:GetCurrentCourse()
- 
+								
                                 if song then
                                         GetDifListX(self, 140)
                                         self:y( (Difficulty:Reverse()[diff]) * 34.5+0)-- -7)
@@ -111,24 +113,125 @@ local function DrawDifListItem(diff)
                                                 local topscore=0
  
                                                 if scores[1] then
-                                                        topscore = scores[1]:GetScore()
+                                                    topscore = scores[1]:GetScore()
                                                 end
  
                                                 self:diffuse(color("0,0,0,1"))
-                                                --self:strokecolor(color("1,1,1,1"))
-                                                self:diffusealpha(1)
-                                                --self:shadowlength(2)
+                                                
+                                                self:diffusealpha(1);
  
                                                 if topscore ~= 0  then
                                                     self:Load("RollingNumbersSongData");
 													self:targetnumber(topscore);
+												else
+													self:diffusealpha(0);
                                                 end
+										
                                         end
                                 end
                         end
                 },
  
  
+                 --FC Ring
+                LoadActor(THEME:GetPathG("Player","Badge FullCombo"))..{
+                        InitCommand=cmd(shadowlength,1;zoom,0;draworder,5;);
+                        BeginCommand=cmd(playcommand,"Set");
+                        OffCommand=cmd(decelerate,0.05;diffusealpha,0;);
+                        SetCommand=function(self)
+                                local st=GAMESTATE:GetCurrentStyle():GetStepsType();
+                                local song=GAMESTATE:GetCurrentSong();
+                                local course = GAMESTATE:GetCurrentCourse();
+                        if song then
+                                if player==PLAYER_1 then
+									GetDifListX(self,249)
+								else
+									GetDifListX(self,115)
+								end
+                                self:y( (Difficulty:Reverse()[diff]) * 34.5 - 8 );
+                                if song:HasStepsTypeAndDifficulty(st,diff) then
+                                        local steps = song:GetOneSteps( st, diff );
+                                        if PROFILEMAN:IsPersistentProfile(player) then
+                                                profile = PROFILEMAN:GetProfile(player);
+                                        else
+                                                profile = PROFILEMAN:GetMachineProfile();
+                                        end;
+                                        scorelist = profile:GetHighScoreList(song,steps);
+                                        assert(scorelist);
+                                        local scores = scorelist:GetHighScores();
+                                        assert(scores);
+                                        local topscore;
+										local temp=#scores;
+                                        if scores[1] then
+											self:addx(-31);
+											self:addy(13.5);
+											for i=1,temp do 
+												if scores[i] then
+													topscore = scores[i];
+													assert(topscore);
+													local misses = topscore:GetTapNoteScore("TapNoteScore_Miss")+topscore:GetTapNoteScore("TapNoteScore_CheckpointMiss")
+												+topscore:GetTapNoteScore("TapNoteScore_HitMine")+topscore:GetHoldNoteScore("HoldNoteScore_LetGo")
+													local boos = topscore:GetTapNoteScore("TapNoteScore_W5")
+													local goods = topscore:GetTapNoteScore("TapNoteScore_W4")
+													local greats = topscore:GetTapNoteScore("TapNoteScore_W3")
+													local perfects = topscore:GetTapNoteScore("TapNoteScore_W2")
+													local marvelous = topscore:GetTapNoteScore("TapNoteScore_W1")
+													local hasUsedLittle = string.find(topscore:GetModifiers(),"Little")
+													if (misses+boos) == 0 and scores[1]:GetScore() > 0 and (marvelous+perfects)>0 and (not hasUsedLittle) and topscore:GetGrade()~="Grade_Failed"  then
+															if (goods+greats+perfects) == 0 then
+																	self:diffuse(GameColor.Judgment["JudgmentLine_W1"]);
+																	self:glowblink();
+																	self:effectperiod(0.20);
+																	self:zoom(0.35);
+
+																	break;
+															elseif goods+greats == 0 then
+																	self:diffuse(GameColor.Judgment["JudgmentLine_W2"]);
+																	--self:glowshift();
+																	self:zoom(0.35);
+																	
+																	break;
+															elseif (misses+boos+goods) == 0 then
+																	self:diffuse(BoostColor(GameColor.Judgment["JudgmentLine_W3"],0.75));
+																	self:stopeffect();
+																	self:zoom(0.35);
+																	
+																	if i==1 then
+																		self:diffuse(BoostColor(GameColor.Judgment["JudgmentLine_W3"],1));
+																	end;
+																	break;
+															elseif (misses+boos) == 0 then
+																	self:diffuse(BoostColor(GameColor.Judgment["JudgmentLine_W4"],0.75));
+																	self:stopeffect();
+																	self:zoom(0.35);
+																	if i==1 then
+																		self:diffuse(BoostColor(GameColor.Judgment["JudgmentLine_W4"],1));
+																	end;
+																	break;
+															end;
+															self:diffusealpha(0.8);
+													else
+															self:diffusealpha(0);
+													end;
+												else
+													self:diffusealpha(0);
+													break;
+												end;
+											end;
+                                        else
+                                                self:diffusealpha(0);
+                                        end;
+                                else
+                                        self:diffusealpha(0);
+                                end;
+						else
+                            self:diffusealpha(0);   
+                        end;
+						
+						self:spin();
+						self:effectmagnitude(0,0,360);
+                end
+                },
                 --grade
                 Def.Quad{
                         InitCommand=cmd(shadowlength,2;zoom,0.3;draworder,5),
@@ -209,102 +312,10 @@ local function DrawDifListItem(diff)
                 };
  
  
-                --FC Ring
-                LoadActor(THEME:GetPathG("Player","Badge FullCombo"))..{
-                        InitCommand=cmd(shadowlength,2;zoom,0;draworder,5);
-                        BeginCommand=cmd(playcommand,"Set");
-                        OffCommand=cmd(decelerate,0.05;diffusealpha,0;);
-                        SetCommand=function(self)
-                                local st=GAMESTATE:GetCurrentStyle():GetStepsType();
-                                local song=GAMESTATE:GetCurrentSong();
-                                local course = GAMESTATE:GetCurrentCourse();
-                        if song then
-                                if player==PLAYER_1 then
-									GetDifListX(self,249)
-								else
-									GetDifListX(self,115)
-								end
-                                self:y( (Difficulty:Reverse()[diff]) * 34.5 - 8 );
-                                if song:HasStepsTypeAndDifficulty(st,diff) then
-                                        local steps = song:GetOneSteps( st, diff );
-                                        if PROFILEMAN:IsPersistentProfile(player) then
-                                                profile = PROFILEMAN:GetProfile(player);
-                                        else
-                                                profile = PROFILEMAN:GetMachineProfile();
-                                        end;
-                                        scorelist = profile:GetHighScoreList(song,steps);
-                                        assert(scorelist);
-                                        local scores = scorelist:GetHighScores();
-                                        assert(scores);
-                                        local topscore;
-										local temp=#scores;
-                                        if scores[1] then
-											self:addx(-31);
-											self:addy(13.5);
-											for i=1,temp do 
-												if scores[i] then
-													topscore = scores[i];
-													assert(topscore);
-													local misses = topscore:GetTapNoteScore("TapNoteScore_Miss")+topscore:GetTapNoteScore("TapNoteScore_CheckpointMiss")
-												+topscore:GetTapNoteScore("TapNoteScore_HitMine")+topscore:GetHoldNoteScore("HoldNoteScore_LetGo")
-													local boos = topscore:GetTapNoteScore("TapNoteScore_W5")
-													local goods = topscore:GetTapNoteScore("TapNoteScore_W4")
-													local greats = topscore:GetTapNoteScore("TapNoteScore_W3")
-													local perfects = topscore:GetTapNoteScore("TapNoteScore_W2")
-													local marvelous = topscore:GetTapNoteScore("TapNoteScore_W1")
-													local hasUsedLittle = string.find(topscore:GetModifiers(),"Little")
-													if (misses+boos) == 0 and scores[1]:GetScore() > 0 and (marvelous+perfects)>0 and (not hasUsedLittle) then
-															if (greats+perfects) == 0 then
-																	self:diffuse(GameColor.Judgment["JudgmentLine_W1"]);
-																	self:glowblink();
-																	self:effectperiod(0.20);
-																	self:zoom(0.25);
-																	break;
-															elseif greats == 0 then
-																	self:diffuse(GameColor.Judgment["JudgmentLine_W2"]);
-																	--self:glowshift();
-																	self:zoom(0.25);
-																	break;
-															elseif (misses+boos+goods) == 0 then
-																	self:diffuse(BoostColor(GameColor.Judgment["JudgmentLine_W3"],0.75));
-																	self:stopeffect();
-																	self:zoom(0.25);
-																	if i==1 then
-																		self:diffuse(BoostColor(GameColor.Judgment["JudgmentLine_W3"],1));
-																	end;
-																	break;
-															elseif (misses+boos) == 0 then
-																	self:diffuse(BoostColor(GameColor.Judgment["JudgmentLine_W4"],0.75));
-																	self:stopeffect();
-																	self:zoom(0.25);
-																	if i==1 then
-																		self:diffuse(BoostColor(GameColor.Judgment["JudgmentLine_W4"],1));
-																	end;
-																	break;
-															end;
-															self:diffusealpha(0.8);
-													else
-															self:diffusealpha(0);
-													end;
-												else
-													self:diffusealpha(0);
-													break;
-												end;
-											end;
-                                        else
-                                                self:diffusealpha(0);
-                                        end;
-                                else
-                                        self:diffusealpha(0);
-                                end;
-						else
-                            self:diffusealpha(0);   
-                        end;
-                end
-                }
+
 				
         }
- 
+		
         return DifficultyListItem
 end
 

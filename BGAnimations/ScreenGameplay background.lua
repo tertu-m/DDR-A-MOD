@@ -1,1 +1,6 @@
-return Def.ActorFrame { Name="YOU_WISH_YOU_WERE_PLAYING_BEATMANIA_RIGHT_NOW" };
+local bgScripts = dofile(THEME:GetAbsolutePath("BGAnimations/BGScripts/default.lua"))
+if bgScripts.worked then
+    return bgScripts.bg
+else
+    return Def.ActorFrame{}
+end

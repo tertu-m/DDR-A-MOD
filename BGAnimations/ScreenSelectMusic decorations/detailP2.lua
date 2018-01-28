@@ -86,14 +86,14 @@ InitCommand=cmd(addy,-110);
 								local perfects = topscore:GetTapNoteScore("TapNoteScore_W2")
 								local marvelous = topscore:GetTapNoteScore("TapNoteScore_W1")
 								local hasUsedLittle = string.find(topscore:GetModifiers(),"Little")
-								if (misses+boos) == 0 and scores[1]:GetScore() > 0 and (marvelous+perfects)>0 and (not hasUsedLittle) then
-										if (greats+perfects) == 0 then
+								if (misses+boos) == 0 and scores[1]:GetScore() > 0 and (marvelous+perfects)>0 and (not hasUsedLittle) and topscore:GetGrade()~="Grade_Failed"  then
+										if (goods+greats+perfects) == 0 then
 												self:diffuse(GameColor.Judgment["JudgmentLine_W1"]);
 												self:glowblink();
 												self:effectperiod(0.20);
 												self:zoom(0.45);
 												break;
-										elseif greats == 0 then
+										elseif goods+greats == 0 then
 												self:diffuse(GameColor.Judgment["JudgmentLine_W2"]);
 												--self:glowshift();
 												self:zoom(0.45);
@@ -295,7 +295,20 @@ function TopRecord(pn) --回傳最高分的那個紀錄
 			myScoreSet["topW5"]  = scores[1]:GetTapNoteScore("TapNoteScore_W5");
 			myScoreSet["topMiss"]  = scores[1]:GetTapNoteScore("TapNoteScore_W5")+scores[1]:GetTapNoteScore("TapNoteScore_Miss");
 			myScoreSet["topOK"]  = scores[1]:GetHoldNoteScore("HoldNoteScore_Held");
-			myScoreSet["topEXScore"]  = scores[1]:GetTapNoteScore("TapNoteScore_W1")*3+scores[1]:GetTapNoteScore("TapNoteScore_W2")*2+scores[1]:GetTapNoteScore("TapNoteScore_W3")+scores[1]:GetHoldNoteScore("HoldNoteScore_Held")*3;
+			
+			if (StepsOrTrail:GetRadarValues( pn ):GetValue( "RadarCategory_TapsAndHolds" ) >=0) then --If it is not a random course
+				if scores[1]:GetGrade() ~= "Grade_Failed" then
+					myScoreSet["topEXScore"] = scores[1]:GetTapNoteScore("TapNoteScore_W1")*3+scores[1]:GetTapNoteScore("TapNoteScore_W2")*2+scores[1]:GetTapNoteScore("TapNoteScore_W3")+scores[1]:GetHoldNoteScore("HoldNoteScore_Held")*3;
+				else
+					myScoreSet["topEXScore"] = (StepsOrTrail:GetRadarValues( pn ):GetValue( "RadarCategory_TapsAndHolds" )*3+StepsOrTrail:GetRadarValues( pn ):GetValue( "RadarCategory_Holds" )*3)*scores[1]:GetPercentDP();
+				end
+			else --If it is Random Course then the scores[1]:GetPercentDP() value will be -1
+				if scores[1]:GetGrade() ~= "Grade_Failed" then
+					myScoreSet["topEXScore"]  = scores[1]:GetTapNoteScore("TapNoteScore_W1")*3+scores[1]:GetTapNoteScore("TapNoteScore_W2")*2+scores[1]:GetTapNoteScore("TapNoteScore_W3")+scores[1]:GetHoldNoteScore("HoldNoteScore_Held")*3;
+				else
+					myScoreSet["topEXScore"]  = 0;
+				end
+			end
 			myScoreSet["topMAXCombo"]  = scores[1]:GetMaxCombo();
 			myScoreSet["topDate"]  = scores[1]:GetDate() ;
 		else

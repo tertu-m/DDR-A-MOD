@@ -3,45 +3,53 @@
 -- Example usage of new system (not really implemented yet)
 local Prefs =
 {
-	AutoSetStyle =
+	ConvertHighScores =
 	{
 		Default = false,
-		Choices = { "ON", "OFF" },
-		Values = { true, false }
+		Choices = {"No", "Yes"},
+		Values = {false, true}
+	},
+	FakeGrades =
+	{
+		Default = false,
+		Choices = {"No", "Yes"},
+		Values = {false, true}
+	},
+	Calories =
+	{
+		Default = false,
+		Choices = {"No", "Yes"},
+		Values = {false, true}
+	},
+	Fast = 
+	{
+		Default = false,
+		Choices = {"No", "Yes"},
+		Values = {false, true}
 	},
 }
 
 ThemePrefs.InitAll(Prefs)
 
-function InitUserPrefs()
-	local Prefs = {
-		UserPrefGameplayShowStepsDisplay = true,
-		UserPrefGameplayShowStepsDisplay = true,
-		UserPrefGameplayShowScore = false,
-		UserPrefScoringMode = 'DDR Extreme',
-		UserPrefShowLotsaOptions = true,
-		UserPrefAutoSetStyle = false,
-		UserPrefLongFail = false,
-		UserPrefNotePosition = true,
-		UserPrefComboOnRolls = false,
-		UserPrefProtimingP1 = false,
-		UserPrefProtimingP2 = false,
-		FlashyCombos = false,
-		UserPrefComboUnderField = true,
-		UserPrefFancyUIBG = true,
-		UserPrefTimingDisplay = true
-	}
-	for k, v in pairs(Prefs) do
-		-- kind of xxx
-		local GetPref = type(v) == "boolean" and GetUserPrefB or GetUserPref
-		if GetPref(k) == nil then
-			SetUserPref(k, v)
-		end
+function ScreenGameplay_P1X()
+	local st = GAMESTATE:GetCurrentStyle():GetStepsType();
+	if st == "StepsType_Dance_Solo" then
+		return SCREEN_CENTER_X;
+	elseif st == "StepsType_Dance_Couple" then
+		return WideScale(SCREEN_CENTER_X-175,SCREEN_CENTER_X-160);
+	else
+		return WideScale(SCREEN_CENTER_X-175,SCREEN_CENTER_X-240);
 	end
-
-	-- screen filter
-	setenv("ScreenFilterP1",0)
-	setenv("ScreenFilterP2",0)
+end
+function ScreenGameplay_P2X()
+	local st = GAMESTATE:GetCurrentStyle():GetStepsType();
+	if st == "StepsType_Dance_Solo" then
+		return SCREEN_CENTER_X;
+	elseif st == "StepsType_Dance_Couple" then
+		return WideScale(SCREEN_CENTER_X+175,SCREEN_CENTER_X+160);
+	else
+		return WideScale(SCREEN_CENTER_X+175,SCREEN_CENTER_X+240);
+	end
 end
 
 function GetProTiming(pn)
@@ -63,24 +71,38 @@ function GetNote(pn)
 		return false
 	end
 end
+function GetGameplaySubDisplay(pn)
+	local pname = ToEnumShortString(pn)
+	if GetUserPref("GameplaySubDisplay"..pname) then
+		return GetUserPrefB("GameplaySubDisplay"..pname)
+	else
+		SetUserPref("GameplaySubDisplay"..pname,"Calorie Counter")
+		return "Calorie Counter"
+	end
+end
 
---[[ option rows ]]
--- screen filter
--- screen filter
 function OptionRowScreenFilter()
+	--we use integers equivalent to the alpha value multiplied by 10
+	--to work around float precision issues
+	local choiceToAlpha = {0, 3, 6, 9}
+	local alphaToChoice = {[0]=1, [3]=2, [6]=3, [9]=4}
 	local t = {
-		Name="ScreenFilter",
+		Name="Filter",
 		LayoutType = "ShowAllInRow",
 		SelectType = "SelectOne",
 		OneChoiceForAllPlayers = false,
-		ExportOnChange = false,
-		Choices = { THEME:GetString('OptionNames','Off'), '0.1', '0.2', '0.3', '0.4', '0.5', '0.6', '0.7', '0.8', '0.9', '1.0', },
+		ExportOnChange = true,
+		Choices = { THEME:GetString('OptionNames','Off'),
+			THEME:GetString('OptionTitles', 'FilterDark'),
+			THEME:GetString('OptionTitles', 'FilterDarker'),
+			THEME:GetString('OptionTitles', 'FilterDarkest'),
+		 },
 		LoadSelections = function(self, list, pn)
 			local pName = ToEnumShortString(pn)
 			local filterValue = getenv("ScreenFilter"..pName)
-			
+
 			if filterValue ~= nil then
-				local val = scale(tonumber(filterValue),0,1,1,#list )
+				local val = alphaToChoice[filterValue] or 1
 				list[val] = true
 			else
 				setenv("ScreenFilter"..pName,0)
@@ -93,8 +115,7 @@ function OptionRowScreenFilter()
 			for i=1,#list do
 				if not found then
 					if list[i] == true then
-						local val = scale(i,1,#list,0,1)
-						setenv("ScreenFilter"..pName,val)
+						setenv("ScreenFilter"..pName,choiceToAlpha[i])
 						found = true
 					end
 				end
@@ -104,38 +125,128 @@ function OptionRowScreenFilter()
 	setmetatable(t, t)
 	return t
 end
+local judgmentTransformYs = {
+	Standard={normal=-76, reverse=67},
+	Old={normal=-30, reverse=30}
+}
+setmetatable(judgmentTransformYs, {__index=function(this, _) return this.Standard end})
 
-function ReadOrCreateScreenFilterValueForPlayer(PlayerUID, MyValue)
-	local FilterFile = RageFileUtil:CreateRageFile()
-	if FilterFile:Open("Save/ScreenFilter/"..PlayerUID..".txt",1) then 
-		local str = FilterFile:Read();
-		MyValue =tonumber(str);
+function JudgmentTransformCommand( self, params )
+	self:x( 0 )
+	self:y( judgmentTransformYs
+		[ThemePrefs.Get("JudgmentHeight")]
+		[params.bReverse and "reverse" or "normal"] )
+end
+
+function ReadOrCreateAppearancePlusValueForPlayer(PlayerUID, MyValue)
+	local AppearancePlusFile = RageFileUtil:CreateRageFile()
+	if AppearancePlusFile:Open("Save/AppearancePlus/"..PlayerUID..".txt",1) then
+		local str = AppearancePlusFile:Read();
+		MyValue =str;
 	else
-		FilterFile:Open("Save/ScreenFilter/"..PlayerUID..".txt",2);
-		FilterFile:Write("0");
-		MyValue=0;
+		AppearancePlusFile:Open("Save/AppearancePlus/"..PlayerUID..".txt",2);
+		AppearancePlusFile:Write("Visible");
+		MyValue="Visible";
 	end
-	FilterFile:Close();
+	AppearancePlusFile:Close();
 	return MyValue;
 end
 
-function SaveScreenFilterValueForPlayer( PlayerUID, MyValue)
-	-- local FilterFile = RageFileUtil:CreateRageFile();
-	-- if FilterFile:Open("Save/ScreenFilter/"..PlayerUID..".txt",1) then 
-		-- local str = FilterFile:Read();
-		-- MyValue = tonumber(str);
-	-- else
-		-- FilterFile:Open("Save/ScreenFilter/"..PlayerUID..".txt",2);
-		-- FilterFile:Write("0");
-	-- end
-	-- FilterFile:Close();
-	
-	local FilterFile2 = RageFileUtil:CreateRageFile();
-	FilterFile2:Open("Save/ScreenFilter/"..PlayerUID..".txt",2);
-	FilterFile2:Write(tostring(MyValue));
-	FilterFile2:Close();
+function SaveAppearancePlusValueForPlayer( PlayerUID, MyValue)
+
+
+	local AppearancePlusFile2 = RageFileUtil:CreateRageFile();
+	AppearancePlusFile2:Open("Save/AppearancePlus/"..PlayerUID..".txt",2);
+	AppearancePlusFile2:Write(tostring(MyValue));
+	AppearancePlusFile2:Close();
 end
 
+function OptionRowAppearancePlusUseFile()
+	local t = {
+		Name="AppearancePlus",
+		LayoutType = "ShowAllInRow",
+		SelectType = "SelectOne",
+		OneChoiceForAllPlayers = false,
+		ExportOnChange = false,
+		Choices = { "Visible", 'Hidden', 'Sudden', 'Stealth', 'Hidden+', 'Sudden+', 'Hidden+&Sudden+', },
+		LoadSelections = function(self, list, pn)
+			local AppearancePlusValue = "Visible";
+			local pf = PROFILEMAN:GetProfile(pn);
+			local PlayerUID = "";
+
+			if pf then
+				PlayerUID = pf:GetGUID()
+				AppearancePlusValue = ReadOrCreateAppearancePlusValueForPlayer(PlayerUID,AppearancePlusValue);
+			else
+				PlayerUID = "UnknownPlayerUID"
+				AppearancePlusValue = "Visible";
+			end
+
+			if AppearancePlusValue ~= nil then
+				if AppearancePlusValue == "Hidden" then
+					list[2] = true
+				elseif AppearancePlusValue == "Sudden" then
+					list[3] = true
+				elseif AppearancePlusValue == "Stealth" then
+					list[4] = true
+				elseif AppearancePlusValue == "Hidden+" then
+					list[5] = true
+				elseif AppearancePlusValue == "Sudden+" then
+					list[6] = true
+				elseif AppearancePlusValue == "Hidden+&Sudden+" then
+					list[7] = true
+				else
+					list[1] = true
+				end
+			else
+				SaveAppearancePlusValueForPlayer(PlayerUID,"Visible")
+				list[1] = true
+			end
+
+		end,
+		SaveSelections = function(self, list, pn)
+			local pName = ToEnumShortString(pn)
+			local found = false
+			local PlayerUID = "";
+			local pf = PROFILEMAN:GetProfile(pn);
+
+			if pf then
+				PlayerUID = pf:GetGUID()
+			else
+				PlayerUID = "UnknownPlayerUID"
+			end
+
+			for i=1,#list do
+				if not found then
+					if list[i] == true then
+						local val = "Visible";
+						if i==2 then
+							val = "Hidden";
+						elseif i==3 then
+							val = "Sudden";
+						elseif i==4 then
+							val = "Stealth";
+						elseif i==5 then
+							val = "Hidden+";
+						elseif i==6 then
+							val = "Sudden+";
+						elseif i==7 then
+							val = "Hidden+&Sudden+";
+						else
+							val = "Visible";
+						end
+						setenv("AppearancePlus"..pName,val)
+						SaveAppearancePlusValueForPlayer(PlayerUID,val)
+						found = true
+						break;
+					end
+				end
+			end
+		end,
+	};
+	setmetatable(t, t)
+	return t
+end
 
 function OptionRowScreenFilterUseFile()
 	local t = {
@@ -151,15 +262,15 @@ function OptionRowScreenFilterUseFile()
 			local filterValue = 0;
 			local pf = PROFILEMAN:GetProfile(pn);
 			local PlayerUID = "";
-			
-			if pf then 
-				PlayerUID = pf:GetGUID()  
+
+			if pf then
+				PlayerUID = pf:GetGUID()
 				filterValue = ReadOrCreateScreenFilterValueForPlayer(PlayerUID,filterValue);
 			else
 				PlayerUID = "UnknownPlayerUID"
 				filterValue = 0;
 			end
-			
+
 			if filterValue ~= nil then
 				local val = scale(tonumber(filterValue),0,1,1,#list )
 				list[val] = true
@@ -174,13 +285,13 @@ function OptionRowScreenFilterUseFile()
 			local found = false
 			local PlayerUID = "";
 			local pf = PROFILEMAN:GetProfile(pn);
-			
-			if pf then 
-				PlayerUID = pf:GetGUID()  
+
+			if pf then
+				PlayerUID = pf:GetGUID()
 			else
 				PlayerUID = "UnknownPlayerUID"
 			end
-			
+
 			for i=1,#list do
 				if not found then
 					if list[i] == true then
@@ -375,21 +486,21 @@ function GetDefaultOptionLines()
 			return false
 		end
 	end
-	
+
 	local function CheckCharacters(mods)
 		if CHARMAN:GetCharacterCount() > 0 then
 			return mods .. ",18" --TODO: Better line name.
 		end
 		return mods
 	end
-	
+
 	modLines = LineSets[2]
-	
+
 	if not IsExtra() then
 		modLines = GetUserPrefB("UserPrefShowLotsaOptions")
 			and LineSets[1] or LineSets[2]
 	end
-	
+
 	return CheckCharacters(modLines)
 end
 
@@ -679,7 +790,7 @@ function FirstReMIX_TargetScore()
 						list[2] = true
 					elseif GetUserPref("FirstReMIX_TargetScore_" .. profileGUID)=='personal' then
 						list[3] = true
-					end						
+					end
 				else
 					WritePrefToFile("FirstReMIX_TargetScore_"..profileGUID, 'off');
 					list[1] = true

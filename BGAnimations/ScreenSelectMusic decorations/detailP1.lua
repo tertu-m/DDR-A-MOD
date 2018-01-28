@@ -7,7 +7,7 @@ t[#t+1] = LoadActor("DetailFrame")..{
 			BeginCommand=cmd(playcommand,"Set");
 			OffCommand=cmd(decelerate,0.05;diffusealpha,0;);
 			SetCommand=function(self)
-				
+
 				myScoreSet = TopRecord(PLAYER_1);
 				if (myScoreSet["SongOrCourse"]==1) then
 					if (myScoreSet["HasScore"]==1) then
@@ -60,7 +60,7 @@ InitCommand=cmd(addy,-110);
 				end;
 
 				scorelist = profile:GetHighScoreList(SongOrCourse,StepsOrTrail);
-				
+
 				assert(scorelist);
 					local scores = scorelist:GetHighScores();
 					assert(scores);
@@ -74,7 +74,7 @@ InitCommand=cmd(addy,-110);
 					if scores[1] then
 						-- self:addx(-31);
 						-- self:addy(13.5);
-						for i=1,temp do 
+						for i=1,temp do
 							if scores[i] then
 								topscore = scores[i];
 								assert(topscore);
@@ -86,14 +86,14 @@ InitCommand=cmd(addy,-110);
 								local perfects = topscore:GetTapNoteScore("TapNoteScore_W2")
 								local marvelous = topscore:GetTapNoteScore("TapNoteScore_W1")
 								local hasUsedLittle = string.find(topscore:GetModifiers(),"Little")
-								if (misses+boos) == 0 and scores[1]:GetScore() > 0 and (marvelous+perfects)>0 and (not hasUsedLittle) then
-										if (greats+perfects) == 0 then
+								if (misses+boos) == 0 and scores[1]:GetScore() > 0 and (marvelous+perfects)>0 and (not hasUsedLittle) and topscore:GetGrade()~="Grade_Failed"  then
+										if (goods+greats+perfects) == 0 then
 												self:diffuse(GameColor.Judgment["JudgmentLine_W1"]);
 												self:glowblink();
 												self:effectperiod(0.20);
 												self:zoom(0.45);
 												break;
-										elseif greats == 0 then
+										elseif goods+greats == 0 then
 												self:diffuse(GameColor.Judgment["JudgmentLine_W2"]);
 												--self:glowshift();
 												self:zoom(0.45);
@@ -136,9 +136,9 @@ InitCommand=cmd(addy,-110);
 		CurrentStepsP1ChangedMessageCommand=cmd(playcommand,"Set");
 		CurrentTrailP1ChangedMessageCommand=cmd(playcommand,"Set");
 	};
-	
-	
-	
+
+
+
 };
 
 --grades
@@ -185,7 +185,7 @@ InitCommand=cmd(addy,-110);
 					local topgrade;
 					local temp=#scores;
 						if scores[1] then
-							for i=1,temp do 
+							for i=1,temp do
 								topgrade = scores[1]:GetGrade();
 								curgrade = scores[i]:GetGrade();
 								assert(topgrade);
@@ -217,19 +217,19 @@ InitCommand=cmd(addy,-110);
 			else
 				self:diffusealpha(0);
 			end;
-			
-			
+
+
 		end;
 		CurrentSongChangedMessageCommand=cmd(playcommand,"Set");
 		CurrentCourseChangedMessageCommand=cmd(playcommand,"Set");
 		CurrentStepsP1ChangedMessageCommand=cmd(playcommand,"Set");
 		CurrentTrailP1ChangedMessageCommand=cmd(playcommand,"Set");
 	};
-	
+
 };
 
 
-function TopRecord(pn) --回傳最高分的那個紀錄
+function TopRecord(pn) --嚙稷嚙褒最堆蕭嚙踝蕭嚙踝蕭嚙踝蕭嚙諉穿蕭嚙踝蕭
 	local SongOrCourse, StepsOrTrail;
 	local myScoreSet = {
 		["HasScore"] = 0;
@@ -246,7 +246,7 @@ function TopRecord(pn) --回傳最高分的那個紀錄
 		["topMAXCombo"]=0;
 		["topDate"]=0;
 		};
-		
+
 	if GAMESTATE:IsCourseMode() then
 		SongOrCourse = GAMESTATE:GetCurrentCourse();
 		StepsOrTrail = GAMESTATE:GetCurrentTrail(pn);
@@ -256,7 +256,7 @@ function TopRecord(pn) --回傳最高分的那個紀錄
 	end;
 
 	local profile, scorelist;
-	
+
 	if SongOrCourse and StepsOrTrail then
 		local st = StepsOrTrail:GetStepsType();
 		local diff = StepsOrTrail:GetDifficulty();
@@ -295,7 +295,20 @@ function TopRecord(pn) --回傳最高分的那個紀錄
 			myScoreSet["topW5"]  = scores[1]:GetTapNoteScore("TapNoteScore_W5");
 			myScoreSet["topMiss"]  = scores[1]:GetTapNoteScore("TapNoteScore_W5")+scores[1]:GetTapNoteScore("TapNoteScore_Miss");
 			myScoreSet["topOK"]  = scores[1]:GetHoldNoteScore("HoldNoteScore_Held");
-			myScoreSet["topEXScore"]  = scores[1]:GetTapNoteScore("TapNoteScore_W1")*3+scores[1]:GetTapNoteScore("TapNoteScore_W2")*2+scores[1]:GetTapNoteScore("TapNoteScore_W3")+scores[1]:GetHoldNoteScore("HoldNoteScore_Held")*3;
+			--myScoreSet["topEXScore"]  = scores[1]:GetTapNoteScore("TapNoteScore_W1")*3+scores[1]:GetTapNoteScore("TapNoteScore_W2")*2+scores[1]:GetTapNoteScore("TapNoteScore_W3")+scores[1]:GetHoldNoteScore("HoldNoteScore_Held")*3;
+			if (StepsOrTrail:GetRadarValues( pn ):GetValue( "RadarCategory_TapsAndHolds" ) >=0) then --If it is not a random course
+				if scores[1]:GetGrade() ~= "Grade_Failed" then
+					myScoreSet["topEXScore"] = scores[1]:GetTapNoteScore("TapNoteScore_W1")*3+scores[1]:GetTapNoteScore("TapNoteScore_W2")*2+scores[1]:GetTapNoteScore("TapNoteScore_W3")+scores[1]:GetHoldNoteScore("HoldNoteScore_Held")*3;
+				else
+					myScoreSet["topEXScore"] = (StepsOrTrail:GetRadarValues( pn ):GetValue( "RadarCategory_TapsAndHolds" )*3+StepsOrTrail:GetRadarValues( pn ):GetValue( "RadarCategory_Holds" )*3)*scores[1]:GetPercentDP();
+				end
+			else --If it is Random Course then the scores[1]:GetPercentDP() value will be -1
+				if scores[1]:GetGrade() ~= "Grade_Failed" then
+					myScoreSet["topEXScore"]  = scores[1]:GetTapNoteScore("TapNoteScore_W1")*3+scores[1]:GetTapNoteScore("TapNoteScore_W2")*2+scores[1]:GetTapNoteScore("TapNoteScore_W3")+scores[1]:GetHoldNoteScore("HoldNoteScore_Held")*3;
+				else
+					myScoreSet["topEXScore"]  = 0;
+				end
+			end
 			myScoreSet["topMAXCombo"]  = scores[1]:GetMaxCombo();
 			myScoreSet["topDate"]  = scores[1]:GetDate() ;
 		else
@@ -305,7 +318,7 @@ function TopRecord(pn) --回傳最高分的那個紀錄
 	else
 		myScoreSet["HasScore"] = 0;
 		myScoreSet["SongOrCourse"]=0;
-		
+
 	end
 	return myScoreSet;
 
@@ -352,23 +365,49 @@ t[#t+1] = Def.RollingNumbers { -- Topscore
 				end
 				self:diffuse(color("1,1,1,1"));
 				self:strokecolor(color("0.1,0.1,0.3,1"));
-				myScoreSet = TopRecord(PLAYER_1);
-				
-				if (myScoreSet["SongOrCourse"]==1) then
-					if (myScoreSet["HasScore"]==1) then
-					
-						local topscore = myScoreSet["topscore"];
-						
-						self:diffusealpha(1);
-						
-						self:targetnumber(topscore);
+				local SongOrCourse, StepsOrTrail;
+					if GAMESTATE:IsCourseMode() then
+						SongOrCourse = GAMESTATE:GetCurrentCourse();
+						StepsOrTrail = GAMESTATE:GetCurrentTrail(PLAYER_1);
 					else
-						self:diffusealpha(1);
-						self:targetnumber(0);
+						SongOrCourse = GAMESTATE:GetCurrentSong();
+						StepsOrTrail = GAMESTATE:GetCurrentSteps(PLAYER_1);
+					end;
+
+				if SongOrCourse and StepsOrTrail then
+					local st = StepsOrTrail:GetStepsType();
+					local diff = StepsOrTrail:GetDifficulty();
+					local courseType = GAMESTATE:IsCourseMode() and SongOrCourse:GetCourseType() or nil;
+
+					if PROFILEMAN:IsPersistentProfile(PLAYER_1) then
+						--player
+						profile = PROFILEMAN:GetProfile(PLAYER_1);
+					else
+						-- machine profile
+						profile = PROFILEMAN:GetMachineProfile();
+					end;
+
+					scorelist = profile:GetHighScoreList(SongOrCourse,StepsOrTrail);
+					assert(scorelist)
+					local scores = scorelist:GetHighScores();
+					if scores[1] then
+						if ThemePrefs.Get "ConvertHighScores" and (not GAMESTATE:IsCourseMode()) then
+							topscore = 10*math.round(SN2Scoring.GetSN2ScoreFromHighScore(StepsOrTrail, scores[1])/10)
+						else
+							topscore = scores[1]:GetScore()
+						end
+					else
+						topscore = 0;
+					end;
+					assert(topscore)
+					if topscore ~= 0 then
+						self:targetnumber(topscore)
+					else
+						self:targetnumber(0)
 					end
 				else
-					self:diffusealpha(0);
-				end
+					self:diffusealpha(0)
+				end;
 			end;
 			CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
 			CurrentTrailP1ChangedMessageCommand=cmd(queuecommand,"Set");
@@ -419,14 +458,14 @@ t[#t+1] = Def.RollingNumbers { -- topEXScore
 				self:diffuse(color("1,1,0,1"));
 				self:strokecolor(color("0.1,0.1,0.3,1"));
 				myScoreSet = TopRecord(PLAYER_1);
-				
+
 				if (myScoreSet["SongOrCourse"]==1) then
 					if (myScoreSet["HasScore"]==1) then
-					
+
 						local topscore = myScoreSet["topEXScore"];
-						
+
 						self:diffusealpha(1);
-						
+
 						self:targetnumber(topscore);
 					else
 						self:diffusealpha(1);
@@ -458,14 +497,14 @@ t[#t+1] = Def.RollingNumbers { -- topW1
 				self:diffuse(color("1,1,1,1"));
 				self:strokecolor(color("0.1,0.1,0.3,1"));
 				myScoreSet = TopRecord(PLAYER_1);
-				
+
 				if (myScoreSet["SongOrCourse"]==1) then
 					if (myScoreSet["HasScore"]==1) then
-					
+
 						local topscore = myScoreSet["topW1"];
-						
+
 						self:diffusealpha(1);
-						
+
 						self:targetnumber(topscore);
 					else
 						self:diffusealpha(1);
@@ -497,14 +536,14 @@ t[#t+1] = Def.RollingNumbers { -- topW2
 				self:diffuse(color("1,1,1,1"));
 				self:strokecolor(color("0.1,0.1,0.3,1"));
 				myScoreSet = TopRecord(PLAYER_1);
-				
+
 				if (myScoreSet["SongOrCourse"]==1) then
 					if (myScoreSet["HasScore"]==1) then
-					
+
 						local topscore = myScoreSet["topW2"];
-						
+
 						self:diffusealpha(1);
-						
+
 						self:targetnumber(topscore);
 					else
 						self:diffusealpha(1);
@@ -536,12 +575,12 @@ t[#t+1] = Def.RollingNumbers { -- topW3
 				self:diffuse(color("1,1,1,1"));
 				self:strokecolor(color("0.1,0.1,0.3,1"));
 				myScoreSet = TopRecord(PLAYER_1);
-				
+
 				if (myScoreSet["SongOrCourse"]==1) then
 					if (myScoreSet["HasScore"]==1) then
-					
+
 						local topscore = myScoreSet["topW3"];
-						
+
 						self:diffusealpha(1);
 						self:targetnumber(topscore);
 					else
@@ -574,12 +613,12 @@ t[#t+1] = Def.RollingNumbers { -- topW4
 				self:diffuse(color("1,1,1,1"));
 				self:strokecolor(color("0.1,0.1,0.3,1"));
 				myScoreSet = TopRecord(PLAYER_1);
-				
+
 				if (myScoreSet["SongOrCourse"]==1) then
 					if (myScoreSet["HasScore"]==1) then
-					
+
 						local topscore = myScoreSet["topW4"];
-						
+
 						self:diffusealpha(1);
 						self:targetnumber(topscore);
 					else
@@ -612,12 +651,12 @@ t[#t+1] = Def.RollingNumbers { -- topOK
 				self:diffuse(color("1,1,1,1"));
 				self:strokecolor(color("0.1,0.1,0.3,1"));
 				myScoreSet = TopRecord(PLAYER_1);
-				
+
 				if (myScoreSet["SongOrCourse"]==1) then
 					if (myScoreSet["HasScore"]==1) then
-					
+
 						local topscore = myScoreSet["topOK"];
-						
+
 						self:diffusealpha(1);
 						self:targetnumber(topscore);
 					else
@@ -650,12 +689,12 @@ t[#t+1] = Def.RollingNumbers { -- topMiss
 				self:diffuse(color("1,1,1,1"));
 				self:strokecolor(color("0.1,0.1,0.3,1"));
 				myScoreSet = TopRecord(PLAYER_1);
-				
+
 				if (myScoreSet["SongOrCourse"]==1) then
 					if (myScoreSet["HasScore"]==1) then
-					
+
 						local topscore = myScoreSet["topMiss"];
-						
+
 						self:diffusealpha(1);
 						self:targetnumber(topscore);
 					else

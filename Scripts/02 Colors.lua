@@ -4,7 +4,7 @@
 Color = {
 -- Color Library
 -- These colors are pure swatch colors and are here purely to be used
--- on demand without having to type color("stuff") or dig through 
+-- on demand without having to type color("stuff") or dig through
 -- a palette to get the color you want.
 	Black		=	color("0,0,0,1"),
 	White		=	color("1,1,1,1"),
@@ -115,7 +115,7 @@ function groupColor(groupName)
 		["DDR 2013"]= "#69ebca",
 		["DDR 2014"]= "#69ebca",
 		["DDR A"]= "#12cff2",
-		
+
 		["01 - DDR 1st"]= "#b4e556",
 		["02 - DDR 2ndMIX"]= "#eb8bc8",
 		["03 - DDR 3rdMIX"]= "#fdf380",
@@ -132,7 +132,7 @@ function groupColor(groupName)
 		["14 - DDR 2013"]= "#69ebca",
 		["15 - DDR 2014"]= "#69ebca",
 		["16 - DDR A"]= "#12cff2",
-		
+
 		["Pop"] = "#ffbe32",
 		["Anime/Game"] = "#fff582",
 		["Variety"] = "#eb8cc8",
@@ -200,16 +200,16 @@ function PlayerScoreColor( pn )
 	return color("1,1,1,1")
 end
 
-function CustomDifficultyToColor( sCustomDifficulty ) 
+function CustomDifficultyToColor( sCustomDifficulty )
 	return GameColor.Difficulty[sCustomDifficulty]
 end
 
-function CustomDifficultyToDarkColor( sCustomDifficulty ) 
+function CustomDifficultyToDarkColor( sCustomDifficulty )
 	local c = GameColor.Difficulty[sCustomDifficulty]
 	return { c[1]/2, c[2]/2, c[3]/2, c[4] }
 end
 
-function CustomDifficultyToLightColor( sCustomDifficulty ) 
+function CustomDifficultyToLightColor( sCustomDifficulty )
 	local c = GameColor.Difficulty[sCustomDifficulty]
 	return { scale(c[1],0,1,0.5,1), scale(c[2],0,1,0.5,1), scale(c[3],0,1,0.5,1), c[4] }
 end
@@ -234,4 +234,11 @@ end
 function JudgmentLineToStrokeColor( i )
 	local c = GameColor.Judgment[i]
 	return { c[1]/2, c[2]/2, c[3]/2, c[4] }
+end
+
+function GetLeadingAttribute(number, baselength, color)
+	local len = baselength - #(tostring(math.floor(number)))
+	if len > 0 then
+		return {Length = len, Diffuse = color}
+	end
 end
