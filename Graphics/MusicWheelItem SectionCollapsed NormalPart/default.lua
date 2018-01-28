@@ -30,8 +30,7 @@ local t = Def.ActorFrame {
 				self:settextf( '%s', "RANDOM SELECT MUSIC");
 			elseif GAMESTATE:GetSortOrder() == 'SortOrder_Group' then
 				if string.find(params.Text, '-' ) then
-					local start = string.find(params.Text, '-' );
-					self:settextf( '%s',string.sub(params.Text,start+2));
+					self:settextf( '%s',string.gsub(params.Text,"%d%d? %- ", ""));
 				else
 					self:settextf( '%s',params.Text);
 				end

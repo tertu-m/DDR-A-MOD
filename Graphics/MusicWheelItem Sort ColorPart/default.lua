@@ -1,11 +1,13 @@
 function arrangeXPosition3(myself, index, offset)
-	if index%2==0 then
-		myself:x(-230+offset);
-	elseif index%2==1 then
-		myself:x(230+offset);
-	else
-		myself:x(300+offset);
-	end;
+	if index then
+		if index%2==0 then
+			myself:x(-230+offset);
+		elseif index%2==1 then
+			myself:x(230+offset);
+		else
+			myself:x(300+offset);
+		end;
+	end
 end
 
 local t = Def.ActorFrame {
@@ -32,11 +34,11 @@ local t = Def.ActorFrame {
 			end
 			arrangeXPosition3(self,params.Index,0);
 		end;
-	};	
+	};
 	LoadActor("cat_over")..{
 		InitCommand=cmd(y,-8;zoom,0);
 		SetMessageCommand=function(self,params)
-			
+
 			if params.HasFocus then
 				self:zoom(2.7);
 			else
@@ -45,7 +47,7 @@ local t = Def.ActorFrame {
 			arrangeXPosition3(self,params.Index,0);
 		end;
 		};
-		
+
 
   LoadFont("_arial black 20px")..{
 		InitCommand=cmd(y,0;zoom,1.5;maxwidth,240;diffuse,Color("White");uppercase,true);
